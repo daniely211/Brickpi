@@ -8,7 +8,7 @@ y_points_motor2 = []
 
 periods = []
 
-with open('log kp:300.0 ki:400.0 kd:0.0', 'r') as tsvin:
+with open('log kp:300.0 ki:1000.0 kd:11.0', 'r') as tsvin:
 	tsvin = csv.reader(tsvin, delimiter='\t')
 
 	i = 0
@@ -57,6 +57,12 @@ with open('log kp:300.0 ki:400.0 kd:0.0', 'r') as tsvin:
 x_linspace1 = np.linspace(first_time_val, last_time_val, num=len(y_points_motor1))
 x_linspace2 = np.linspace(first_time_val, last_time_val, num=len(y_points_motor2))
 
+axes = plt.gca()
+
+ymin = -0.2
+ymax = 0.2
+
+axes.set_ylim([ymin, ymax])
 plt.plot(x_linspace1, y_points_motor1)
 plt.plot(x_linspace2, y_points_motor2)
 plt.show()
