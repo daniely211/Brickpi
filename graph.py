@@ -8,7 +8,7 @@ y_points_motor2 = []
 
 periods = []
 
-with open('log kp:300.0 ki:500.0 kd:11.0', 'r') as tsvin:
+with open('log kp:300.0 ki:500.0 kd:8.0', 'r') as tsvin:
 	tsvin = csv.reader(tsvin, delimiter='\t')
 
 	i = 0

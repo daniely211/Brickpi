@@ -41,15 +41,17 @@ while True:
 	interface.startLogging("log kp:"+str(kp)+" ki:"+str(ki)+ " kd:"+str(kd))
 	while not interface.motorAngleReferencesReached(motors) :
 		try:
-			motorAngles = interface.getMotorAngles(motors)
+			motoxrAngles = interface.getMotorAngles(motors)
 			if motorAngles :
 				print "Motor angles: ", motorAngles[0][0], ", ", motorAngles[1][0]
 			time.sleep(0.1)
 		except Exception as e:
 			print("Exception!!!")
+			print("stop logging")
 			interface.stopLogging()
 			raise e
 	interface.stopLogging()
+	print("stop logging")
 	print "Destination reached!"
 
 
