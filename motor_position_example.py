@@ -15,6 +15,9 @@ interface.motorEnable(motors[1])
 # Pu = 0.30204
 
 # kp = 0.6ku, ki = 2kp/Pu, and kd = kpPu/8.
+# kp =300, ki=500, kp=8
+
+# Initially should'nt have to touch
 motorParams = interface.MotorAngleControllerParameters()
 motorParams.maxRotationAcceleration = 6.0
 motorParams.maxRotationSpeed = 12.0
@@ -22,6 +25,8 @@ motorParams.feedForwardGain = 255/20.0
 motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
+
+# Adjust PID parameters, Ziegler-Nicholls method
 motorParams.pidParameters.k_p = 300
 motorParams.pidParameters.k_i = 500
 motorParams.pidParameters.K_d = 8
@@ -37,14 +42,20 @@ interface.setMotorAngleControllerParameters(motors[1],motorParams)
 while True:
 	angle = float(input("Enter a angle to rotate (in radians): "))
 
-	interface.increaseMotorAngleReferences(motors,[angle,angle])
-	interface.startLogging("log kp:"+str(kp)+" ki:"+str(ki)+ " kd:"+str(kd))
-	while not interface.motorAngleReferencesReached(motors) :
+	# Set both motors to reach angle input
+        interface.increaseMotorAngleReferences(motors,[angle,angle])
+	# Start the logging to output file...
+        interface.startLogging("/Brickpi/log/kp_"+str(kp)+"_ki_"+str(ki)+"_kd_"+str(kd))+".txt."
+	
+        # While we have not reached the the Angle reference on the motors
+        while not interface.motorAngleReferencesReached(motors) :
 		try:
-			motoxrAngles = interface.getMotorAngles(motors)
+			# get the motor angle
+                        motoxrAngles = interface.getMotorAngles(motors)
 			if motorAngles :
 				print "Motor angles: ", motorAngles[0][0], ", ", motorAngles[1][0]
-			time.sleep(0.1)
+			# pause execution for 0.1 seconds
+                        time.sleep(0.1)
 		except Exception as e:
 			print("Exception!!!")
 			print("stop logging")
