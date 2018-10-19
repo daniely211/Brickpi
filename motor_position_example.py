@@ -24,7 +24,7 @@ motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 motorParams.pidParameters.k_p = 300
 motorParams.pidParameters.k_i = 500
-motorParams.pidParameters.K_d = 6
+motorParams.pidParameters.K_d = 8
 
 kp = motorParams.pidParameters.k_p
 ki = motorParams.pidParameters.k_i
