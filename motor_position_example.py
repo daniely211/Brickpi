@@ -24,7 +24,7 @@ motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 motorParams.pidParameters.k_p = 300
 motorParams.pidParameters.k_i = 500
-motorParams.pidParameters.K_d = 20
+motorParams.pidParameters.K_d = 6
 
 kp = motorParams.pidParameters.k_p
 ki = motorParams.pidParameters.k_i
@@ -49,6 +49,7 @@ while True:
 			print("Exception!!!")
 			interface.stopLogging("log kp:"+str(kp)+" ki:"+str(ki)+ " kd:"+str(kd))
 			raise e
+	interface.stopLogging("log kp:"+str(kp)+" ki:"+str(ki)+ " kd:"+str(kd))
 	print "Destination reached!"
 
 
