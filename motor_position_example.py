@@ -47,9 +47,9 @@ while True:
 			time.sleep(0.1)
 		except Exception as e:
 			print("Exception!!!")
-			interface.stopLogging("log kp:"+str(kp)+" ki:"+str(ki)+ " kd:"+str(kd))
+			interface.stopLogging()
 			raise e
-	interface.stopLogging("log kp:"+str(kp)+" ki:"+str(ki)+ " kd:"+str(kd))
+	interface.stopLogging()
 	print "Destination reached!"
 
 
