@@ -23,7 +23,7 @@ motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 motorParams.pidParameters.k_p = 300
-motorParams.pidParameters.k_i = 1500
+motorParams.pidParameters.k_i = 400
 motorParams.pidParameters.k_d = 11
 
 kp = motorParams.pidParameters.k_p
