@@ -26,6 +26,10 @@ motorParams.pidParameters.k_p = 300
 motorParams.pidParameters.k_i = 1987
 motorParams.pidParameters.k_d = 11
 
+kp = motorParams.pidParameters.k_p
+ki = motorParams.pidParameters.k_i
+kd = motorParams.pidParameters.k_d
+
 interface.setMotorAngleControllerParameters(motors[0],motorParams)
 interface.setMotorAngleControllerParameters(motors[1],motorParams)
 
@@ -33,13 +37,13 @@ while True:
 	angle = float(input("Enter a angle to rotate (in radians): "))
 
 	interface.increaseMotorAngleReferences(motors,[angle,angle])
-	interface.startLogging("log kp:"+str(motorParams.pidParameters.k_p)+" ki:"+str(motorParams.pidParameters.k_i)+ " kd:"+str(motorParams.pidParameters.k_d))
+	interface.startLogging("log kp:"+str(kp)+" ki:"+str(ki)+ " kd:"+str(kd))
 	while not interface.motorAngleReferencesReached(motors) :
 		motorAngles = interface.getMotorAngles(motors)
 		if motorAngles :
 			print "Motor angles: ", motorAngles[0][0], ", ", motorAngles[1][0]
 		time.sleep(0.1)
-	interface.stopLogging("log kp:"+str(motorParams.pidParameters.k_p)+" ki:"+str(motorParams.pidParameters.k_i)+ " kd:"+str(motorParams.pidParameters.k_d))
+	interface.stopLogging("log kp:"+str(kp)+" ki:"+str(ki)+ " kd:"+str(kd))
 	print "Destination reached!"
 
 
