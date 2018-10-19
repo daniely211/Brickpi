@@ -9,6 +9,12 @@ motors = [0,3]
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])
 
+# 2.09672 - 1.79468 = 0.30204
+
+# ku = 500
+# Pu = 0.30204
+
+# kp = 0.6ku, ki = 2kp/Pu, and kd = kpPu/8.
 motorParams = interface.MotorAngleControllerParameters()
 motorParams.maxRotationAcceleration = 6.0
 motorParams.maxRotationSpeed = 12.0
@@ -16,9 +22,9 @@ motorParams.feedForwardGain = 255/20.0
 motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
-motorParams.pidParameters.k_p = 500.0
-motorParams.pidParameters.k_i = 0.0
-motorParams.pidParameters.k_d = 0.0
+motorParams.pidParameters.k_p = 300
+motorParams.pidParameters.k_i = 1987
+motorParams.pidParameters.k_d = 11
 
 interface.setMotorAngleControllerParameters(motors[0],motorParams)
 interface.setMotorAngleControllerParameters(motors[1],motorParams)
@@ -35,6 +41,6 @@ while True:
 		time.sleep(0.1)
 	interface.stopLogging("log"+str(motorParams.pidParameters.k_p))
 	print "Destination reached!"
-	
+
 
 interface.terminate()
