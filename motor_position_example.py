@@ -28,7 +28,7 @@ motorParams.pidParameters.maxOutput = 255
 
 # Adjust PID parameters, Ziegler-Nicholls method
 motorParams.pidParameters.k_p = 540
-motorParams.pidParameters.k_i = 2160
+motorParams.pidParameters.k_i = 3000
 motorParams.pidParameters.K_d = 34
 
 kp = motorParams.pidParameters.k_p
