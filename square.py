@@ -31,7 +31,7 @@ interface.setMotorAngleControllerParameters(motors[0],motorParams)
 interface.setMotorAngleControllerParameters(motors[1],motorParams)
 
 def left90():
-	angle = 5.022895231 #FIX LATER
+	angle = 5.180895231 #FIX LATER
 	interface.increaseMotorAngleReferences(motors,[angle, -angle])
 
 def right90():
