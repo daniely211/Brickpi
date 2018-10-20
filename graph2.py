@@ -23,28 +23,28 @@ periods = []
 
 
 
-f = ".txt"
+f = "./log/kp_100.0_ki_0.0_kd_0.0.txt"
 
 with open(f, 'r') as tsvin:
-	tsvin = csv.reader(tsvin, delimiter='\t')
+    tsvin = csv.reader(tsvin, delimiter='\t')
 
-	i = 0
-	init_y = 0
-	init_x = 0
-	final_x = 0
-	sampled_times = 0
-	first_time_val = 0
-	last_time_val = 0
-	
-        # base angle : b
-        b = tsvin[0][1]
+    i = 0
+    init_y = 0
+    init_x = 0
+    final_x = 0
+    sampled_times = 0
+    first_time_val = 0
+    last_time_val = 0
+    
+    # base angle : b
+    #b = tsvin[0][1]
 
-        for row in tsvin:
-          # filtered_row : f_row      
-          f_row = filter(None, row)
-          x_points_motor1.append(float(f_row[0]))
-  	  y_points_motor1.append(float(f_row[2]))
-          y_points_motor2.append(float(f_row[4]))
+    for row in tsvin:
+      # filtered_row : f_row      
+      f_row = filter(None, row)
+      x_points.append(float(f_row[0]))
+      y_points_motor1.append(float(f_row[2]))
+      y_points_motor2.append(float(f_row[4]))
 
 
 # now to plot
