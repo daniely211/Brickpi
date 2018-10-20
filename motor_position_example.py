@@ -27,7 +27,7 @@ motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 
 # Adjust PID parameters, Ziegler-Nicholls method
-motorParams.pidParameters.k_p = 900
+motorParams.pidParameters.k_p = 1000
 motorParams.pidParameters.k_i = 0
 motorParams.pidParameters.K_d = 0
 
@@ -45,7 +45,7 @@ while True:
 	# Set both motors to reach angle input
         interface.increaseMotorAngleReferences(motors,[angle,angle])
 	# Start the logging to output file...
-        interface.startLogging("/home/pi/Brickpi/log/kp_"+str(kp)+"_ki_"+str(ki)+"_kd_"+str(kd)+".txt")
+        interface.startLogging("/home/pi/Brickpi/log/kp_"+str(kp)+"_ki_"+str(ki)+"_kd_"+str(kd)+"2.txt")
 	
         # While we have not reached the the Angle reference on the motors
         while not interface.motorAngleReferencesReached(motors) :
