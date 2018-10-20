@@ -45,16 +45,16 @@ while True:
         interface.increaseMotorAngleReferences(motors,[angle,angle])
 	# Start the logging to output file...
         interface.startLogging("/home/pi/Brickpi/log/kp_"+str(kp)+"_ki_"+str(ki)+"_kd_"+str(kd)+".txt")
-	
+
         # While we have not reached the the Angle reference on the motors
         while not interface.motorAngleReferencesReached(motors) :
 		try:
 			# get the motor angle
-                        motorAngles = interface.getMotorAngles(motors)
+            motorAngles = interface.getMotorAngles(motors)
 			if motorAngles :
 				print "Motor angles: ", motorAngles[0][0], ", ", motorAngles[1][0]
 			# pause execution for 0.1 seconds
-                        time.sleep(0.1)
+            time.sleep(0.1)
 		except Exception as e:
 			print("Exception!!!")
 			print("stop logging")

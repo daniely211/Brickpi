@@ -30,7 +30,7 @@ wheel_dist = 13.7
 interface.setMotorAngleControllerParameters(motors[0],motorParams)
 interface.setMotorAngleControllerParameters(motors[1],motorParams)
 
-def left90():    
+def left90():
 	angle = 5.023 #FIX LATER
 	interface.increaseMotorAngleReferences(motors,[angle, -angle])
 
@@ -38,11 +38,12 @@ def right90():
     angle = 5.023
     interface.increaseMotorAngleReferences(motors,[-angle, angle])
     while not interface.motorAngleReferencesReached(motors):
-      print("")
+      time.sleep(0.1)
 
 def forward(dist):
     angle = 2*math.pi*( dist/wheel_c ) #FIX LATER
     interface.increaseMotorAngleReferences(motors,[angle, angle])
+	print("rotating " + angle)
     while not interface.motorAngleReferencesReached(motors):
       print("")
 
@@ -53,11 +54,10 @@ def square():
         left90()
 
 if __name__ == "__main__":
-  
+
   forward(10)
-  
+
   right90()
   print("Finished")
 
 interface.terminate()
-
