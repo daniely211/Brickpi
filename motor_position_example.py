@@ -38,7 +38,6 @@ kd = motorParams.pidParameters.K_d
 interface.setMotorAngleControllerParameters(motors[0],motorParams)
 interface.setMotorAngleControllerParameters(motors[1],motorParams)
 
-
 while True:
 	angle = float(input("Enter a angle to rotate (in radians): "))
 
