@@ -49,12 +49,12 @@ while True:
         # While we have not reached the the Angle reference on the motors
         while not interface.motorAngleReferencesReached(motors) :
 		try:
-			# get the motor angle
-            motorAngles = interface.getMotorAngles(motors)
+		# get the motor angle
+	                motorAngles = interface.getMotorAngles(motors)
 			if motorAngles :
 				print "Motor angles: ", motorAngles[0][0], ", ", motorAngles[1][0]
-			# pause execution for 0.1 seconds
-            time.sleep(0.1)
+				# pause execution for 0.1 seconds
+        		time.sleep(0.1)
 		except Exception as e:
 			print("Exception!!!")
 			print("stop logging")
