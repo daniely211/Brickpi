@@ -17,10 +17,10 @@ motorParams.feedForwardGain = 255/20.0
 motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
+
 motorParams.pidParameters.k_p = 540
 motorParams.pidParameters.k_i = 3000
-motorParams.pidParameters.k_d = 34
-
+motorParams.pidParameters.k_D = 34
 
 # Wheel in cm
 wheel_r = 2.15
@@ -49,6 +49,7 @@ def forward(dist):
 
 
 def square():
+	#18.6046511628
     for i in range(0,4):
         forward(40)
         left90()
