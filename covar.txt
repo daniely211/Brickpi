@@ -1,0 +1,14 @@
+CALCULATION SHOULD BE IN CENTIMETER
+!!CM!!
+
+Millimeters 
+10
+06
+07
+08
+09
+04
+11
+05
+13
+07
