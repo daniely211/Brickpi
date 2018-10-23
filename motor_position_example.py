@@ -44,7 +44,7 @@ while True:
 	# Set both motors to reach angle input
         interface.increaseMotorAngleReferences(motors,[angle,angle])
 	# Start the logging to output file...
-        interface.startLogging("/home/pi/Brickpi/log/kp_"+str(kp)+"_ki_"+str(ki)+"_kd_"+str(kd)+".txt")
+        interface.startLogging("/home/pi/Brickpi/log/NewDesign/kp_"+str(kp)+"_ki_"+str(ki)+"_kd_"+str(kd)+".txt")
 
         # While we have not reached the the Angle reference on the motors
         while not interface.motorAngleReferencesReached(motors) :
