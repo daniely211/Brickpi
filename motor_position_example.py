@@ -28,8 +28,8 @@ motorParams.pidParameters.maxOutput = 255
 
 # Adjust PID parameters, Ziegler-Nicholls method
 motorParams.pidParameters.k_p = 540
-motorParams.pidParameters.k_i = 3000
-motorParams.pidParameters.K_d = 30
+motorParams.pidParameters.k_i = 2000
+motorParams.pidParameters.K_d = 34
 
 kp = motorParams.pidParameters.k_p
 ki = motorParams.pidParameters.k_i
@@ -42,7 +42,7 @@ while True:
 	angle = float(input("Enter a angle to rotate (in radians): "))
 
 	# Set both motors to reach angle input
-        interface.increaseMotorAngleReferences(motors,[angle,angle])
+        interface.increaseMotorAngleReferences(motors,[-angle,-angle])
 	# Start the logging to output file...
         interface.startLogging("/home/pi/Brickpi/log/NewDesign/kp_"+str(kp)+"_ki_"+str(ki)+"_kd_"+str(kd)+".txt")
 

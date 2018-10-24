@@ -19,7 +19,7 @@ motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 
 motorParams.pidParameters.k_p = 540
-motorParams.pidParameters.k_i = 2000
+motorParams.pidParameters.k_i = 3000
 motorParams.pidParameters.K_d = 34
 
 # 
@@ -39,16 +39,15 @@ def left90():
 	interface.increaseMotorAngleReferences(motors,[angle, -angle])
 
 def right90():
-    angle = 6.1
+    angle = 5.7
     #5.180895231
     interface.increaseMotorAngleReferences(motors,[-angle, angle])
     while not interface.motorAngleReferencesReached(motors):
       time.sleep(0.1)
 
 def forward(dist):
-    #dist=dist+15.1 #add the length of robot so start point is front rather than back wheels 
     angle = 2*math.pi*( dist/wheel_c )*1.02 #FIX LATER
-    interface.increaseMotorAngleReferences(motors,[-angle, -angle])
+    interface.increaseMotorAngleReferences(motors,[angle, angle])
     print("rotating " + str(angle))
     while not interface.motorAngleReferencesReached(motors):
       time.sleep(0.1)
@@ -57,14 +56,12 @@ def forward(dist):
 def square():
 	#18.6046511628
     for i in range(0,4):
-        forward(40)
+        #forward(40)
         right90()
-  
+	time.sleep(1)
 
 if __name__ == "__main__":
- square()
-
-	
+   square()
 #  forward(40)
 #  right90()
 #  forward(40)
