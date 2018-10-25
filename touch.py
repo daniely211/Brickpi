@@ -6,7 +6,7 @@ interface = brickpi.Interface()
 interface.initialize()
 
 motors = [0,1]
-speed = 6.0
+speed = 3.0
 left_touch_port = 2
 right_touch_port = 3
 
@@ -32,13 +32,25 @@ interface.setMotorRotationSpeedReferences(motors,[speed,speed])
 interface.sensorEnable(left_touch_port, brickpi.SensorType.SENSOR_TOUCH)
 interface.sensorEnable(right_touch_port, brickpi.SensorType.SENSOR_TOUCH)
 
-forward(40)
-left(90)
-right(180)
+print "Moving"
 
-print "Press Ctrl+C to exit"
 while True:
-	time.sleep(1)
+    left_result = interface.getSensorValue(left_touch_port)
+    right_result = interface.getSensorValue(right_touch_port)
+
+	if left_result and right_result:
+        left_touched = left_result[0]
+        right_touched = right_result[0]
+
+        if left_touched and right_touched:
+            print "front"
+            left(90)
+        elif left_touched:
+            print "left"
+            right(90)
+        elif right_touched:
+            print "right"
+            left(90)
 
 
 interface.terminate()
