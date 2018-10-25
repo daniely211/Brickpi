@@ -1,8 +1,8 @@
 import brickpi
 import time
-from square import forward
+from square import forward, left, right
 
-interface=brickpi.Interface()
+interface = brickpi.Interface()
 interface.initialize()
 
 motors = [0,1]
@@ -33,10 +33,12 @@ interface.sensorEnable(left_touch_port, brickpi.SensorType.SENSOR_TOUCH)
 interface.sensorEnable(right_touch_port, brickpi.SensorType.SENSOR_TOUCH)
 
 forward(40)
+left(90)
+right(180)
 
 print "Press Ctrl+C to exit"
 while True:
 	time.sleep(1)
-	
+
 
 interface.terminate()
