@@ -35,7 +35,7 @@ motorParams.pidParameters.k_p = 540
 interface.setMotorAngleControllerParameters(motors[1],motorParams)
 
 def left90():
-	angle = 5.320895231#FIX LATER
+	angle = 6.1#FIX LATER
 	interface.increaseMotorAngleReferences(motors,[angle, -angle])
 
 def right90():
@@ -48,7 +48,7 @@ def right90():
 def forward(dist):
     #dist=dist+15.1 #add the length of robot so start point is front rather than back wheels 
     angle = 2*math.pi*( dist/wheel_c )*1.02 #FIX LATER
-    interface.increaseMotorAngleReferences(motors,[-angle, -angle])
+    interface.increaseMotorAngleReferences(motors,[-angle+2, -angle])
     print("rotating " + str(angle))
     while not interface.motorAngleReferencesReached(motors):
       time.sleep(0.1)
