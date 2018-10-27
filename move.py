@@ -68,5 +68,29 @@ def forward(dist):
     time.sleep(0.1)
 
 
+while True:
+	interface.setMotorRotationSpeedReferences(motors,[speed,speed])
+	time.sleep(0.1)
+	left_result = interface.getSensorValue(left_touch_port)
+	right_result = interface.getSensorValue(right_touch_port)
+
+	if left_result and right_result:
+       		left_touched = left_result[0]
+     		right_touched = right_result[0]
+
+        if left_touched and right_touched:
+        	print "front"
+			interface.setMotorRotationSpeedReferences(motors,[0,0])
+			while not interface.motorRotationSpeedReferenceReached(0):
+				time.sleep(0.1)
+			forward(10)
+			left(90)
+            	
+        elif left_touched:
+           	print "left"
+            	
+        elif right_touched:
+            	print "right"
+
 
 interface.terminate()
