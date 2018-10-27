@@ -6,6 +6,8 @@ interface = brickpi.Interface()
 interface.initialize()
 
 motors = [0,3]
+left_touch_port = 1
+right_touch_port = 2
 
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])
