@@ -56,7 +56,7 @@ def forward(dist):
 def square():
 	#18.6046511628
     for i in range(0,4):
-        #forward(40)
+        forward(40)
         right90()
 	time.sleep(1)
 

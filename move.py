@@ -37,14 +37,14 @@ def distance_to_rads(distance):
     return 2 * math.pi * (dist / wheel_circ) * delta
 
 def rotate(angle, direction):
-    full_circ = 2 * math.pi * (wheel_dist / 2)
-    turn_circ = full_circ * (angle / 360)
-    angle_rads = distance_to_rads(turn_circ)
+    	full_circ = 2 * math.pi * (wheel_dist / 2)
+    	turn_circ = full_circ * (angle / 360)
+    	angle_rads = distance_to_rads(turn_circ)
 
-    if direction == 'left':
-        interface.increaseMotorAngleReferences(motors, [angle, -angle])
-    elif direction == 'right':
-        interface.increaseMotorAngleReferences(motors, [-angle, angle])
+    	if direction == 'left':
+        	interface.increaseMotorAngleReferences(motors, [angle, -angle])
+    	elif direction == 'right':
+        	interface.increaseMotorAngleReferences(motors, [-angle, angle])
 
 	while not interface.motorAngleReferencesReached(motors):
 		time.sleep(0.1)
@@ -56,11 +56,13 @@ def right(angle):
     rotate(angle, 'right')
 
 def forward(dist):
-    #dist=dist+15.1 #add the length of robot so start point is front rather than back wheels
-    angle =  #FIX LATER
+    #dist=dist+15.1 #add the length
+    angle = 2*math.pi*( dist/wheel_circ )*1.02 #FIX LATER
     interface.increaseMotorAngleReferences(motors,[-angle+0.1, -angle]) # offset left wheel to keep straight line
     print("rotating " + str(angle))
     while not interface.motorAngleReferencesReached(motors):
       time.sleep(0.1)
+
+
 
 interface.terminate()

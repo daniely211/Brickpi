@@ -1,14 +1,13 @@
 import brickpi
 import time
-from square import forward, left, right
 
 interface = brickpi.Interface()
 interface.initialize()
 
-motors = [0,1]
-speed = 3.0
-left_touch_port = 2
-right_touch_port = 3
+motors = [0,3]
+speed = -6.0
+left_touch_port = 1
+right_touch_port = 2
 
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])
@@ -20,37 +19,39 @@ motorParams.feedForwardGain = 255/20.0
 motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
-motorParams.pidParameters.k_p = 100.0
-motorParams.pidParameters.k_i = 0.0
-motorParams.pidParameters.k_d = 0.0
+
+motorParams.pidParameters.k_p = 100
+motorParams.pidParameters.k_i = 0
+motorParams.pidParameters.K_d = 0
+
 
 interface.setMotorAngleControllerParameters(motors[0],motorParams)
 interface.setMotorAngleControllerParameters(motors[1],motorParams)
 
-interface.setMotorRotationSpeedReferences(motors,[speed,speed])
 
 interface.sensorEnable(left_touch_port, brickpi.SensorType.SENSOR_TOUCH)
 interface.sensorEnable(right_touch_port, brickpi.SensorType.SENSOR_TOUCH)
 
-print "Moving"
-
 while True:
-    left_result = interface.getSensorValue(left_touch_port)
-    right_result = interface.getSensorValue(right_touch_port)
+	interface.setMotorRotationSpeedReferences(motors,[speed,speed])
+	time.sleep(0.1)
+	left_result = interface.getSensorValue(left_touch_port)
+	right_result = interface.getSensorValue(right_touch_port)
 
 	if left_result and right_result:
-        left_touched = left_result[0]
-        right_touched = right_result[0]
+       		left_touched = left_result[0]
+     		right_touched = right_result[0]
 
         if left_touched and right_touched:
-            print "front"
-            left(90)
+        	print "front"
+		speed=-speed 
+            	
         elif left_touched:
-            print "left"
-            right(90)
+           	print "left"
+            	
         elif right_touched:
-            print "right"
-            left(90)
+            	print "right"
+            	
 
 
 interface.terminate()
