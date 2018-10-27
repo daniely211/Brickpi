@@ -25,6 +25,8 @@ motorParams.pidParameters.k_p = 100
 motorParams.pidParameters.k_i = 0
 motorParams.pidParameters.K_d = 0
 
+interface.motorEnable(motors[0])
+interface.motorEnable(motors[1])
 
 interface.setMotorAngleControllerParameters(motors[0],motorParams)
 interface.setMotorAngleControllerParameters(motors[1],motorParams)
@@ -45,11 +47,11 @@ while True:
 
         if left_touched and right_touched:
         	print "front"
+			interface.setMotorRotationSpeedReferences(motors,[0,0])
+			while not interface.motorRotationSpeedReferenceReached(motors):
+				time.sleep(0.1)
 			forward(-10)
-			
-
 			left(90)
-			speed = -speed
             	
         elif left_touched:
            	print "left"
