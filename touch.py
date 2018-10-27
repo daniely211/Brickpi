@@ -1,6 +1,6 @@
 import brickpi
 import time
-from move import left,right
+from move import left,right,forward
 
 interface = brickpi.Interface()
 interface.initialize()
@@ -45,10 +45,9 @@ while True:
 
         if left_touched and right_touched:
         	print "front"
-			speed=-speed 
-			interface.setMotorRotationSpeedReferences(motors,[speed,speed])
-			time.sleep(1)
-			interface.setMotorRotationSpeedReferences(motors,[0,0])
+			forward(-10)
+			
+
 			left(90)
 			speed = -speed
             	

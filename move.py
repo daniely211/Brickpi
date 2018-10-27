@@ -34,7 +34,7 @@ interface.setMotorAngleControllerParameters(motors[1], motorParams)
 
 def distance_to_rads(distance):
     delta = 1.02
-    return 2 * math.pi * (dist / wheel_circ) * delta
+    return 2 * math.pi * (distance / wheel_circ) * delta
 
 def rotate(angle, direction):
     	full_circ = 2 * math.pi * (wheel_dist / 2)
