@@ -47,6 +47,7 @@ while True:
 
         if left_touched and right_touched:
         	print "front"
+
 		interface.setMotorRotationSpeedReferences(motors,[0,0])
 		while not interface.motorRotationSpeedReferenceReached(0):
 			time.sleep(0.1)
