@@ -48,6 +48,7 @@ while True:
 			speed=-speed 
 			interface.setMotorRotationSpeedReferences(motors,[speed,speed])
 			time.sleep(1)
+			interface.setMotorRotationSpeedReferences(motors,[0,0])
 			left(90)
 			speed = -speed
             	
