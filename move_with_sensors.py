@@ -20,9 +20,9 @@ motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 
-motorParams.pidParameters.k_p = 540
-motorParams.pidParameters.k_i = 2000
-motorParams.pidParameters.K_d = 34
+motorParams.pidParameters.k_p = 100
+motorParams.pidParameters.k_i = 0
+motorParams.pidParameters.K_d = 0
 
 # Units: cm
 wheel_radius = 2.15
@@ -42,15 +42,14 @@ def rotate(angle, direction):
     	full_circ = 2 * math.pi * (wheel_dist / 2)
     	turn_circ = full_circ * (angle / 360)
     	angle_rads = distance_to_rads(turn_circ)
-
     	if direction == 'left':
-        	interface.increaseMotorAngleReferences(motors, [angle, -angle])
+        	interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
     	elif direction == 'right':
-        	interface.increaseMotorAngleReferences(motors, [-angle, angle])
+        	interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
 
 	while not interface.motorAngleReferencesReached(motors):
 		time.sleep(0.1)
-
+	print "turned" 
 def left(angle):
     rotate(angle, 'left')
 
@@ -66,10 +65,12 @@ def forward(dist):
           motorAngles = interface.getMotorAngles(motors)
           print(motorAngles[0][0])
           print(motorAngles[1][0])
-          print(interface.getMotorAngleReferences(0))
+          print(interface.getMotorAngleReferences(motors))
     time.sleep(0.1)
 
-
+interface.sensorEnable(left_touch_port, brickpi.SensorType.SENSOR_TOUCH)
+interface.sensorEnable(right_touch_port, brickpi.SensorType.SENSOR_TOUCH)
+left(90.0)
 while True:
 	interface.setMotorRotationSpeedReferences(motors,[speed,speed])
 	time.sleep(0.1)
@@ -82,9 +83,13 @@ while True:
 
 	        if left_touched and right_touched:
         		print "front"
-			interface.setMotorRotationSpeedReferences(motors,[0,0])
-			while not interface.motorRotationSpeedReferenceReached(0):
-				time.sleep(0.1)
+			interface.setMotorRotationSpeedReferences(motors,[-speed,-speed])
+#			while not interface.motorRotationSpeedReferenceReached(20):
+#				time.sleep(0.1)
+#			print "reached speed in reverse"
+  #                      interface.setMotorRotationSpeedReferences(motors,[0,0])
+#			while not interface.motorRotationSpeedReferenceReached(0):
+ #                       	time.sleep(0.1)
 			forward(10)
 			left(90)
             	
