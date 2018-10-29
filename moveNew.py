@@ -1,5 +1,6 @@
 import brickpi
 import time
+import math
 
 interface=brickpi.Interface()
 interface.initialize()
