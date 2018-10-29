@@ -39,6 +39,26 @@ wheel_circ = 2 * math.pi * wheel_radius
 # Distance between wheels
 wheel_dist = 15
 
+def rotate(angle, direction):
+    	full_circ = 2 * math.pi * (wheel_dist / 2)
+    	turn_circ = full_circ * (angle / 360)
+    	angle_rads = distance_to_rads(turn_circ)
+
+    	if direction == 'left':
+        	interface.increaseMotorAngleReferences(motors, [angle, -angle])
+    	elif direction == 'right':
+        	interface.increaseMotorAngleReferences(motors, [-angle, angle])
+	while not interface.motorAngleReferencesReached(motors):
+		time.sleep(0.1)
+
+def left(angle):
+    rotate(angle, 'left')
+
+def right(angle):
+    rotate(angle, 'right')
+
+
+
 def forward(dist):
     interface.setMotorAngleControllerParameters(motors[0],motorParams)
     interface.setMotorAngleControllerParameters(motors[1],motorParams)
@@ -70,5 +90,7 @@ while True:
     	if left_touched and right_touched:
             print("FRONT!!!!")
             forward(-10)
+            right(90)
+
 
 interface.terminate()
