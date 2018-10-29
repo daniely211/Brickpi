@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import glob
 
-f_ls = sorted(glob.glob("./log/*"))
+f_ls = sorted(glob.glob("./log/NewDesign/*"))
 
 for f in f_ls:
 	periods = []
@@ -54,9 +54,9 @@ for f in f_ls:
 	plt.legend()
 	plt.ylabel('Angle')
 	plt.xlabel('Time')
-	plt.xlim((3,5))
-	plt.ylim((19.8,20.2))
-	plt.savefig("./graph/PID_tuning/angle"+ f[5:-3] +"png")
+	plt.xlim((6,6.4))
+	plt.ylim((49.9,50))
+	plt.savefig("./graph/NewDesign/PID_tuning/angle/"+ f[16:-3] +"png")
 
 	plt.figure()
 	plt.plot(time,difference_angle_motor1, label="error motor1")
@@ -67,4 +67,4 @@ for f in f_ls:
 	plt.xlim((3,5))
 	plt.ylim((-0.05,0.1))
 
-	plt.savefig("./graph/PID_tuning/error"+ f[5:-3] +"png")
+	plt.savefig("./graph/NewDesign/PID_tuning/error/"+ f[16:-3] +"png")

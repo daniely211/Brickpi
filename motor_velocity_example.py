@@ -29,6 +29,6 @@ interface.setMotorRotationSpeedReferences(motors,[speed,speed])
 print "Press Ctrl+C to exit"
 while True:
 	time.sleep(1)
-	
+
 
 interface.terminate()
