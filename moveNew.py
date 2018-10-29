@@ -64,7 +64,11 @@ while True:
 	time.sleep(0.1)
     left_result = interface.getSensorValue(left_touch_port)
     right_result = interface.getSensorValue(right_touch_port)
-    	if left_result and right_result:
+    if left_result and right_result:
+        left_touched = left_result[0]
+        right_touched = right_result[0]
+    	if left_touched and right_touched:
+            print("FRONT!!!!")
             forward(-10)
 
 interface.terminate()
