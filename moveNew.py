@@ -6,9 +6,15 @@ interface=brickpi.Interface()
 interface.initialize()
 
 motors = [0,3]
+speed = -6.0
+left_touch_port = 1
+right_touch_port = 2
 
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])
+interface.sensorEnable(left_touch_port, brickpi.SensorType.SENSOR_TOUCH)
+interface.sensorEnable(right_touch_port, brickpi.SensorType.SENSOR_TOUCH)
+
 
 motorParams = interface.MotorAngleControllerParameters()
 motorParams.maxRotationAcceleration = 6.0
@@ -54,6 +60,12 @@ def forward(dist):
         	print("stop logging")
         	interface.stopLogging()
         	raise e
+while True:
+    time.sleep(0.1)
+    left_result = interface.getSensorValue(left_touch_port)
+    right_result = interface.getSensorValue(right_touch_port)
+    if left_result and right_result:
+      print("front!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      forward(-10)
 
-forward(-10)
 interface.terminate()

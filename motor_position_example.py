@@ -8,6 +8,9 @@ motors = [0,3]
 
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])
+interface.sensorEnable(left_touch_port, brickpi.SensorType.SENSOR_TOUCH)
+interface.sensorEnable(right_touch_port, brickpi.SensorType.SENSOR_TOUCH)
+
 
 # 2.09672 - 1.79468 = 0.30204
 
