@@ -54,13 +54,11 @@ while True:
 		print("stopped")
 		forward(10)
 		left(90)
-            	
+
         elif left_touched:
            	print "left"
-            	
+
         elif right_touched:
             	print "right"
             	
-
-
 interface.terminate()
