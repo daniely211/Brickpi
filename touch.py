@@ -45,20 +45,20 @@ while True:
        		left_touched = left_result[0]
      		right_touched = right_result[0]
 
-        if left_touched and right_touched:
-        	print "front"
+                if left_touched and right_touched:
+        	        print "front"
 
-		interface.setMotorRotationSpeedReferences(motors,[0,0])
-		while not interface.motorRotationSpeedReferenceReached(0):
-			time.sleep(0.1)
-		print("stopped")
-		forward(10)
-		left(90)
+		        interface.setMotorRotationSpeedReferences(motors,[0,0])
+		        #while not interface.motorRotationSpeedReferenceReached(0):
+			#        time.sleep(0.1)
+		        print("stopped")
+		        forward(-30)
+		        left(90)
 
-        elif left_touched:
-           	print "left"
+                elif left_touched:
+           	        print "left"
 
-        elif right_touched:
-            	print "right"
+                elif right_touched:
+            	        print "right"
             	
 interface.terminate()
