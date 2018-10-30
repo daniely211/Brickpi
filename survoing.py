@@ -28,19 +28,19 @@ interface.sensorEnable(port, brickpi.SensorType.SENSOR_ULTRASONIC);
 
 kp = 0.8
 zdesired = 30
-speed = 6
-
 while True:
-    interface.setMotorRotationSpeedReferences(motors,[-speed,-speed])
-    (zactual, extra) = interface.getSensorValue(port)
-    if zactual :
-        # calculate the speed at which it needs to go at
-        extra = -kp*(zdesired - zactual)
-        # angle will be greater if its further away, hence it should turn right more
-        interface.setMotorRotationSpeedReferences(motors,[-speed+extra, -speed-extra])
+        (zactual, extra) = interface.getSensorValue(port)
 
-        print "speed"+ str(speed)
-        print zactual
+	if zactual :
+        # calculate the speed at which it needs to go at
+
+          speed = -kp*(zdesired - zactual)
+          interface.setMotorRotationSpeedReferences(motors,[-speed,-speed])
+
+          print "speed"+ str(speed)
+	  print zactual
+	else:
+	  print "Failed US reading"
 
 	time.sleep(0.05)
 
