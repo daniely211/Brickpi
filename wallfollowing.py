@@ -11,17 +11,16 @@ interface.sensorEnable(port, brickpi.SensorType.SENSOR_ULTRASONIC);
 kp = 100
 zdesired = 30
 while True:
-	zactual = interface.getSensorValue(port)
+        (zactual, extra) = interface.getSensorValue(port)
 
 	if zactual :
         # calculate the speed at which it needs to go at
-        # v = −kp (zdesired − zactual )
 
-        speed = -kp*(zdesired - zactual)
-        print "speed"+ str(speed)
-		print zactual
+          speed = -kp*(zdesired - zactual)
+          print "speed"+ str(speed)
+	  print zactual
 	else:
-		print "Failed US reading"
+	  print "Failed US reading"
 
 	time.sleep(0.05)
 
