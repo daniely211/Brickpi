@@ -26,7 +26,7 @@ interface.setMotorAngleControllerParameters(motors[1],motorParams)
 port = 0 # port which ultrasoic sensor is plugged in to
 interface.sensorEnable(port, brickpi.SensorType.SENSOR_ULTRASONIC);
 
-kp = 2
+kp = 0.8
 zdesired = 30
 while True:
         (zactual, extra) = interface.getSensorValue(port)
@@ -34,11 +34,11 @@ while True:
 	if zactual :
         # calculate the speed at which it needs to go at
 
-        speed = -kp*(zdesired - zactual)
-        interface.setMotorRotationSpeedReferences(motors,[speed,speed])
+          speed = -kp*(zdesired - zactual)
+          interface.setMotorRotationSpeedReferences(motors,[-speed,-speed])
 
-        print "speed"+ str(speed)
-		print zactual
+          print "speed"+ str(speed)
+	  print zactual
 	else:
 	  print "Failed US reading"
 

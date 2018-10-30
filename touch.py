@@ -52,6 +52,11 @@ while True:
 	      		interface.setMotorPwm(motors[1],0)	
 				# while not interface.motorRotationSpeedReferenceReached(0):
 				# 	time.sleep(0.1)
+                        time.sleep(1)
+                        interface.motorDisable(0)
+                        interface.motorDisable(3)
+                        interface.motorEnable(0)
+                        interface.motorEnable(3)
       			time.sleep(1)
                         print("stopped")
 			forward(-30)

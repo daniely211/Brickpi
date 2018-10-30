@@ -66,7 +66,7 @@ def forward(dist):
           motorAngles = interface.getMotorAngles(motors)
           print(motorAngles[0][0])
           print(motorAngles[1][0])
-          print(interface.getMotorAngleReferences(0))
+          print(interface.getMotorAngleReferences(motors))
           time.sleep(0.1)
 
 
