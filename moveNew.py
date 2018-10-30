@@ -71,17 +71,17 @@ def forward(dist):
     while not interface.motorAngleReferencesReached(motors) :
         try:
             motorAngles = interface.getMotorAngles(motors)
-        	if motorAngles :
+            if motorAngles :
         		# print "Motor angles: ", motorAngles[0][0], ", ", motorAngles[1][0]
         		# pause execution for 0.1 seconds
-        		time.sleep(0.1)
+              time.sleep(0.1)
         except Exception as e:
         	print("Exception!!!")
         	print("stop logging")
         	interface.stopLogging()
         	raise e
 while True:
-	time.sleep(0.1)
+    time.sleep(0.1)
     left_result = interface.getSensorValue(left_touch_port)
     right_result = interface.getSensorValue(right_touch_port)
     if left_result and right_result:
