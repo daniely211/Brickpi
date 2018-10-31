@@ -68,13 +68,6 @@ def square():
 
             time.sleep(0.1)
 
-def navigate_to_waypoint(x,y): 
-      Dx=current[0]-x
-      Dy=current[1]-y
-      angle = atan2(Dy, Dx)
-      rotate(angle)
-      dis = math.sqrt(math.pow(Dy,2)+math.pow(Dx, 2))
-      forward(dis)
 
 
 if __name__ == "__main__":
