@@ -29,7 +29,7 @@ wheel_radius = 2.15
 wheel_circ = 2 * pi * wheel_radius
 
 # Distance between wheels
-wheel_dist = 15
+wheel_dist = 15.0
 
 interface.setMotorAngleControllerParameters(motors[0], motorParams)
 interface.setMotorAngleControllerParameters(motors[1], motorParams)
@@ -40,9 +40,9 @@ def distance_to_rads(distance):
 
 def rotate(angle, direction):
     	full_circ = 2 * pi * (wheel_dist / 2)
-    	turn_circ = full_circ * (angle / 360)
+    	turn_circ = full_circ * (float(angle) / 360)
     	angle_rads = distance_to_rads(turn_circ)
-
+	print(str(angle_rads) + "###########################")
     	if direction == 'left':
         	interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
     	elif direction == 'right':
@@ -93,7 +93,7 @@ def square():
 	#18.6046511628
     current =  (0,0,0)
     for i in range(0,4):
-        for i in range(4):
+        for j in range(4):
                 forward(10)
                 previous_pos = current
                 particles = generate_particles_from_movement(current, 10)
@@ -105,8 +105,10 @@ def square():
                 #plot the points
                 print("drawLine:" + str(line))
                 print("drawParticles:" + str(particles))
-
-        left(90)
+	print("###########################WENT FORWARD#################")
+	time.sleep(0.2)        
+	left(90)
+	print("##############TURNED LEFT######################")
         particles = generate_particles_from_turn(current, 90)
         #plot the new points
         print("drawParticles:" + str(particles))
