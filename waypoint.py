@@ -7,6 +7,9 @@ def navigateToWaypoint(X, Y):  #X is desired X,Y is desired Y
     dX = X-x
     phi = atan2(dY,dX)
     dist = sqrt(pow(dY,2)+pow(dX,2))
-    angle = phi - theta #align with point
+    if dX>0:
+        angle = phi - theta #align with point if dX +ve
+    else:
+        angle = phi - (theta-3.14) #offset by pi if dX -ve
     #turnright(angle)
     forward(dist) #idk if this is how it works in python
