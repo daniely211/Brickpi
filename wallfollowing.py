@@ -37,7 +37,7 @@ while True:
         # calculate the speed at which it needs to go at
         extra = -kp*(zdesired - zactual)
         # angle will be greater if its further away, hence it should turn right more
-        interface.setMotorRotationSpeedReferences(motors,[-speed+extra, -speed-extra])
+        interface.setMotorRotationSpeedReferences(motors,[-speed-extra, -speed+extra])
 
         print "speed"+ str(speed)
         print zactual
