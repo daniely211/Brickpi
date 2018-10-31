@@ -7,7 +7,7 @@ import random
 interface=brickpi.Interface()
 interface.initialize()
 
-motors = [0,3]
+motors = [0,2]
 
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])

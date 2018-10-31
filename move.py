@@ -5,7 +5,7 @@ import math
 interface = brickpi.Interface()
 interface.initialize()
 
-motors = [0,3]
+motors = [0,2]
 left_touch_port = 1
 right_touch_port = 2
 speed = -6
