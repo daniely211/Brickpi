@@ -1,7 +1,7 @@
-import brickpi
-import time
-import math
-
+import brickpi 
+import time 
+from math import pi,cos,sin 
+import random 
 interface = brickpi.Interface()
 interface.initialize()
 
@@ -26,7 +26,7 @@ motorParams.pidParameters.K_d = 34
 
 # Units: cm
 wheel_radius = 2.15
-wheel_circ = 2 * math.pi * wheel_radius
+wheel_circ = 2 * pi * wheel_radius
 
 # Distance between wheels
 wheel_dist = 15
@@ -36,10 +36,10 @@ interface.setMotorAngleControllerParameters(motors[1], motorParams)
 
 def distance_to_rads(distance):
     delta = 1.02
-    return 2 * math.pi * (distance / wheel_circ) * delta
+    return 2 * pi * (distance / wheel_circ) * delta
 
 def rotate(angle, direction):
-    	full_circ = 2 * math.pi * (wheel_dist / 2)
+    	full_circ = 2 * pi * (wheel_dist / 2)
     	turn_circ = full_circ * (angle / 360)
     	angle_rads = distance_to_rads(turn_circ)
 
@@ -59,7 +59,7 @@ def right(angle):
 
 def forward(dist):
     #dist=dist+15.1 #add the length
-    angle = 2*math.pi*( dist/wheel_circ )*1.02 #FIX LATER
+    angle = 2*pi*( dist/wheel_circ )*1.02 #FIX LATER
     interface.increaseMotorAngleReferences(motors,[-angle+0.1, -angle]) # offset left wheel to keep straight line
     print("rotating " + str(angle))
     while not interface.motorAngleReferencesReached(motors):
