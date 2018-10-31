@@ -26,37 +26,42 @@ motorParams.pidParameters.K_d = 34
 
 current =  (0,0,0)
 
+def generate_particles_from_movement(current, D):
+      new_points = []
+      for i in range(100):
+            e = random.gauss(0, 5)
+            f = random.gauss(0, 5)
+            new_point = (current[0] + (D + e)*math.cos(current[2]), current[1] + (D + e)*math.sin(current[2]), current[2] + f)
+            new_points.append(new_point)
+
+def generate_particles_from_turn(current, angle):
+      new_points = []
+      for i in range(100):
+            g = random.gauss(0,5)
+            new_point = (current[0], current[1], current[2] + angle + g)
+            new_points.append(new_point)
+
 def square():
 	#18.6046511628
 
       for i in range(0,4):
             for i in range(4):
                   forward(10)
-                  new_points = []
                   previous_pos = current
-                  for i in range(100):
-                        e = random.gauss(0, 5)
-                        f = random.gauss(0, 5)
-                        new_point = (current[0] + (10 + e)*math.cos(current[2]), current[1] + (10 + e)*math.sin(current[2]), current[2] + f)
-                        new_points.append(new_point)
-                  avgX = sum([x for (x,y,theta) in new_points])/100
-                  avgY = sum([y for (x,y,theta) in new_points])/100
-                  avgTheta = sum([theta for (x,y,theta) in new_points])/100
+                  particles = generate_particles_from_movement(current, 10)
+                  avgX = sum([x for (x,y,theta) in particles])/100
+                  avgY = sum([y for (x,y,theta) in particles])/100
+                  avgTheta = sum([theta for (x,y,theta) in particles])/100
                   current = (avgX, avgY,avgTheta)
                   line = (previous_pos[0], previous_pos[1], current[0], current[1])
-                  
-                  #plot the points here
+                  #plot the points
                   print("drawLine:" + str(line))
-                  print("drawParticles:" + str(new_points))
+                  print("drawParticles:" + str(particles))
 
-            right(90)
-            new_points = []
-            for i in range(100):
-                  g = random.gauss(0,5)
-                  new_point = (current[0], current[1], current[2] + 90 + g)
-                  
-            #plot the new points here
-            print("drawParticles:" + str(new_points))
+            left(90)
+            particles = generate_particles_from_turn(current, 90)
+            #plot the new points
+            print("drawParticles:" + str(particles))
 
             time.sleep(0.1)
 
