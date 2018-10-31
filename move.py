@@ -63,10 +63,10 @@ def forward(dist):
     interface.increaseMotorAngleReferences(motors,[-angle+0.1, -angle]) # offset left wheel to keep straight line
     print("rotating " + str(angle))
     while not interface.motorAngleReferencesReached(motors):
-        #   motorAngles = interface.getMotorAngles(motors)
-        #   print(motorAngles[0][0])
-        #   print(motorAngles[1][0])
-        #   print(interface.getMotorAngleReferences(0))
+          motorAngles = interface.getMotorAngles(motors)
+          print(motorAngles[0][0])
+          print(motorAngles[1][0])
+          print(interface.getMotorAngleReferences(motors))
           time.sleep(0.1)
 
 

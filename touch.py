@@ -45,7 +45,7 @@ while True:
        		left_touched = left_result[0]
      		right_touched = right_result[0]
 
-            if left_touched and right_touched:
+			if left_touched and right_touched:
 				print "front"
 
 				interface.setMotorPwm(motors[0],0)
