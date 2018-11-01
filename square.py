@@ -5,7 +5,7 @@ import math
 interface=brickpi.Interface()
 interface.initialize()
 
-motors = [0,3]
+motors = [0,2]
 
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])
@@ -18,9 +18,9 @@ motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 
-motorParams.pidParameters.k_p = 540
-motorParams.pidParameters.k_i = 3000
-motorParams.pidParameters.K_d = 34
+motorParams.pidParameters.k_p = 250.0
+motorParams.pidParameters.k_i = 400.0
+motorParams.pidParameters.K_d = 32.0
 
 # 
 
@@ -47,7 +47,7 @@ def right90():
 
 def forward(dist):
     angle = 2*math.pi*( dist/wheel_c )*1.02 #FIX LATER
-    interface.increaseMotorAngleReferences(motors,[angle, angle])
+    interface.increaseMotorAngleReferences(motors,[-angle, -angle])
     print("rotating " + str(angle))
     while not interface.motorAngleReferencesReached(motors):
       time.sleep(0.1)
@@ -60,10 +60,10 @@ def square():
         right90()
 	time.sleep(1)
 
-if __name__ == "__main__":
-   square()
+#if __name__ == "__main__":
+#  square()
 #  forward(40)
 #  right90()
 #  forward(40)
-
+forward(40)
 interface.terminate()
