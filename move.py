@@ -68,19 +68,20 @@ def forward(dist):
 
 
 
-def generate_particles_from_movement(current, D, i):
+def generate_particles_from_movement(current, D, direction):
       x,y,theta = current[0], current[1], current[2]
       new_points = []
       for i in range(100):
             e = random.gauss(0, 3)
             f = random.gauss(0, 0.05)
-            if i == 0 or i == 2:
+            if direction == 0 or direction == 2:
                 print("cos:" + str(cos(theta+f)))
                 new_point = ((x + 50.0*(D + e)*cos(theta+f)), (y + (D + e)*sin(theta+f)), theta + f)
             else:
                 print("sin:" + str(sin(theta+f)))
                 new_point = ((x + (D + e)*cos(theta+f)), (y + 5.0*(D + e)*sin(theta+f)), theta + f)
-            new_points.append(new_point)
+            time.sleep(0.05)
+	    new_points.append(new_point)
       return new_points
 def generate_particles_from_turn(current, angle):
       x,y,theta = current[0], current[1], current[2]
