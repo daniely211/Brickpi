@@ -20,9 +20,9 @@ motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 
-motorParams.pidParameters.k_p = 540
-motorParams.pidParameters.k_i = 2000
-motorParams.pidParameters.K_d = 34
+motorParams.pidParameters.k_p = 250
+motorParams.pidParameters.k_i = 400
+motorParams.pidParameters.K_d = 32
 
 # Units: cm
 wheel_radius = 2.15
@@ -41,10 +41,10 @@ def distance_to_rads(distance):
 def rotate(angle, direction):
     	full_circ = 2 * pi * (wheel_dist / 2)
     	turn_circ = full_circ * (float(angle) / 360)
-    	angle_rads = distance_to_rads(turn_circ)
-	print(str(angle_rads) + "###########################")
+    	angle_rads = distance_to_rads(turn_circ) * 1.178
     	if direction == 'left':
         	interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
+
     	elif direction == 'right':
         	interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
 
@@ -59,8 +59,9 @@ def right(angle):
 
 def forward(dist):
     #dist=dist+15.1 #add the length
-    angle = 2*pi*( dist/wheel_circ )*1.02 #FIX LATER
-    interface.increaseMotorAngleReferences(motors,[-angle+0.1, -angle]) # offset left wheel to keep straight line
+    angle = 2*pi*( dist/wheel_circ )*1.07 # add 7% to calibrate
+    #adding 0.05% on the left motor below, to make it go straight
+    interface.increaseMotorAngleReferences(motors,[-angle*1.0005, -angle]) # offset left wheel to keep straight line
     print("rotating " + str(angle))
     while not interface.motorAngleReferencesReached(motors):
           motorAngles = interface.getMotorAngles(motors)
@@ -117,4 +118,8 @@ def square():
 
 
 
+<<<<<<< HEAD
+=======
+right(90)
+>>>>>>> 0481ad2d8dc7acdae4b4d2dc5ce14a4d72ab6dba
 interface.terminate()
