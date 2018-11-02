@@ -1,6 +1,6 @@
 import brickpi 
 import time 
-from math import pi,cos,sin 
+from math import pi,cos,sin
 import random 
 interface = brickpi.Interface()
 interface.initialize()
@@ -39,17 +39,17 @@ def distance_to_rads(distance):
     return 2 * pi * (distance / wheel_circ) * delta
 
 def rotate(angle, direction):
-    	full_circ = 2 * pi * (wheel_dist / 2)
-    	turn_circ = full_circ * (float(angle) / 360)
-    	angle_rads = distance_to_rads(turn_circ) * 1.178
-    	if direction == 'left':
-        	interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
+        full_circ = 2 * pi * (wheel_dist / 2)
+        turn_circ = full_circ * (float(angle) / 360)
+        angle_rads = distance_to_rads(turn_circ) * 1.178
+        if direction == 'left':
+            interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
 
-    	elif direction == 'right':
-        	interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
+        elif direction == 'right':
+            interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
 
-	while not interface.motorAngleReferencesReached(motors):
-		time.sleep(0.1)
+        while not interface.motorAngleReferencesReached(motors):
+            time.sleep(0.1)
 
 def left(angle):
     rotate(angle, 'left')
@@ -62,23 +62,24 @@ def forward(dist):
     angle = 2*pi*( dist/wheel_circ )*1.07 # add 7% to calibrate
     #adding 0.05% on the left motor below, to make it go straight
     interface.increaseMotorAngleReferences(motors,[-angle*1.0005, -angle]) # offset left wheel to keep straight line
-    print("rotating " + str(angle))
     while not interface.motorAngleReferencesReached(motors):
-          motorAngles = interface.getMotorAngles(motors)
-          print(motorAngles[0][0])
-          print(motorAngles[1][0])
-          print(interface.getMotorAngleReferences(motors))
+          
           time.sleep(0.1)
 
 
 
-def generate_particles_from_movement(current, D):
+def generate_particles_from_movement(current, D, i):
       x,y,theta = current[0], current[1], current[2]
       new_points = []
       for i in range(100):
             e = random.gauss(0, 3)
-            f = random.gauss(0, 0.02)
-            new_point = (200*(x + (D + e)*cos(theta)), 200*(y + (D + e)*sin(theta)), theta + f)
+            f = random.gauss(0, 0.05)
+            if i == 0 or i == 2:
+                print("cos:" + str(cos(theta+f)))
+                new_point = ((x + 50.0*(D + e)*cos(theta+f)), (y + (D + e)*sin(theta+f)), theta + f)
+            else:
+                print("sin:" + str(sin(theta+f)))
+                new_point = ((x + (D + e)*cos(theta+f)), (y + 5.0*(D + e)*sin(theta+f)), theta + f)
             new_points.append(new_point)
       return new_points
 def generate_particles_from_turn(current, angle):
@@ -91,23 +92,26 @@ def generate_particles_from_turn(current, angle):
       return new_points
 
 def square():
-	#18.6046511628
-    current =  (0,0,0)
+    #18.6046511628
+    current =  (10,10,0)
     for i in range(0,4):
         for j in range(4):
                 forward(10)
-                previous_pos = current
-                particles = generate_particles_from_movement(current, 10)
+                particles = generate_particles_from_movement(current, 10.0, i)
                 avgX = sum([x for (x,y,theta) in particles])/100
                 avgY = sum([y for (x,y,theta) in particles])/100
                 avgTheta = sum([theta for (x,y,theta) in particles])/100
+                line = (current[0], current[1], avgX, avgY)
+                
                 current = (avgX, avgY,avgTheta)
-                line = (previous_pos[0], previous_pos[1], avgX, avgY)
+                
+                
+
                 #plot the points
                 print("drawLine:" + str(line))
                 print("drawParticles:" + str(particles))
-	time.sleep(0.2)        
-	left(90)
+                time.sleep(0.4)        
+        left(90)
         current = (current[0], current[1], current[2] + pi/2)
         particles = generate_particles_from_turn(current, pi/2)
         #plot the new points
