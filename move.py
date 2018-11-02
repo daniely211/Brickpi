@@ -76,8 +76,8 @@ def generate_particles_from_movement(current, D):
       x,y,theta = current[0], current[1], current[2]
       new_points = []
       for i in range(100):
-            e = random.gauss(0, 5)
-            f = random.gauss(0, 5)
+            e = random.gauss(0, 3)
+            f = random.gauss(0, 0.02)
             new_point = (x + (D + e)*cos(theta), y + (D + e)*sin(theta), theta + f)
             new_points.append(new_point)
       return new_points
@@ -85,7 +85,7 @@ def generate_particles_from_turn(current, angle):
       x,y,theta = current[0], current[1], current[2]
       new_points = []
       for i in range(100):
-            g = random.gauss(0,5)
+            g = random.gauss(0,0.1)
             new_point = (x, y, theta + angle + g)
             new_points.append(new_point)
       return new_points
@@ -106,20 +106,16 @@ def square():
                 #plot the points
                 print("drawLine:" + str(line))
                 print("drawParticles:" + str(particles))
-	print("###########################WENT FORWARD#################")
-	time.sleep(0.2)        
-	left(90)
-	print("##############TURNED LEFT######################")
-        particles = generate_particles_from_turn(current, 90)
+	  time.sleep(0.2)        
+	  left(90)
+        current = (current[0], current[1], current[2] + pi/2)
+        particles = generate_particles_from_turn(current, pi/2)
+        current =
         #plot the new points
         print("drawParticles:" + str(particles))
 
         time.sleep(0.1)
 
 
-
-<<<<<<< HEAD
-=======
-right(90)
->>>>>>> 0481ad2d8dc7acdae4b4d2dc5ce14a4d72ab6dba
+square()
 interface.terminate()
