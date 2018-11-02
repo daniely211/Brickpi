@@ -66,4 +66,5 @@ if __name__ == "__main__":
 #  right90()
 #  forward(40)
 
+forward(20)
 interface.terminate()

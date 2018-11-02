@@ -24,7 +24,6 @@ motorParams.pidParameters.k_p = 540
 motorParams.pidParameters.k_i = 3000
 motorParams.pidParameters.K_d = 34
 
-current =  (0,0,0)
 
 def generate_particles_from_movement(current, D):
       x,y,theta = current[0], current[1], current[2]
@@ -46,27 +45,31 @@ def generate_particles_from_turn(current, angle):
 
 def square():
 	#18.6046511628
+    current =  (0,0,0)
+    for i in range(0,4):
+        for j in range(4):
+                forward(10)
+                previous_pos = current
+                particles = generate_particles_from_movement(current, 10)
+                avgX = sum([x for (x,y,theta) in particles])/100
+                avgY = sum([y for (x,y,theta) in particles])/100
+                avgTheta = sum([theta for (x,y,theta) in particles])/100
+                current = (avgX, avgY,avgTheta)
+                line = (previous_pos[0], previous_pos[1], avgX, avgY)
+                #plot the points
+                print("drawLine:" + str(line))
+                print("drawParticles:" + str(particles))
+	print("###########################WENT FORWARD#################")
+	time.sleep(0.2)        
+	left(90)
+	print("##############TURNED LEFT######################")
+        particles = generate_particles_from_turn(current, 90)
+        #plot the new points
+        print("drawParticles:" + str(particles))
 
-      for i in range(0,4):
-            for i in range(4):
-                  forward(10)
-                  previous_pos = current
-                  particles = generate_particles_from_movement(current, 10)
-                  avgX = sum([x for (x,y,theta) in particles])/100
-                  avgY = sum([y for (x,y,theta) in particles])/100
-                  avgTheta = sum([theta for (x,y,theta) in particles])/100
-                  current = (avgX, avgY,avgTheta)
-                  line = (previous_pos[0], previous_pos[1], avgX, avgY)
-                  #plot the points
-                  print("drawLine:" + str(line))
-                  print("drawParticles:" + str(particles))
+        time.sleep(0.1)
 
-            left(90)
-            particles = generate_particles_from_turn(current, 90)
-            #plot the new points
-            print("drawParticles:" + str(particles))
 
-            time.sleep(0.1)
 
 
 

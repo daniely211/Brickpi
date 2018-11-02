@@ -117,5 +117,4 @@ def square():
 
 
 
-square()
 interface.terminate()
