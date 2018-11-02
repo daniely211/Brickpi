@@ -21,9 +21,9 @@ motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 
-motorParams.pidParameters.k_p = 100
-motorParams.pidParameters.k_i = 0
-motorParams.pidParameters.K_d = 0
+motorParams.pidParameters.k_p = 250
+motorParams.pidParameters.k_i = 400
+motorParams.pidParameters.K_d = 32
 
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])

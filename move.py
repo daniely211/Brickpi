@@ -1,6 +1,6 @@
 import brickpi 
 import time 
-from math import pi,cos,sin
+from math import pi,cos,sin,sqrt,atan2,pow
 import random 
 interface = brickpi.Interface()
 interface.initialize()
@@ -33,6 +33,8 @@ wheel_dist = 15.0
 
 interface.setMotorAngleControllerParameters(motors[0], motorParams)
 interface.setMotorAngleControllerParameters(motors[1], motorParams)
+
+current =  (10,10,0)
 
 def distance_to_rads(distance):
     delta = 1.02
@@ -95,7 +97,6 @@ def generate_particles_from_turn(current, angle):
 
 def square():
     #18.6046511628
-    current =  (10,10,0)
     for i in range(0,4):
         for j in range(4):
                 forward(10)
@@ -121,6 +122,32 @@ def square():
 
         time.sleep(0.1)
 
+        
 
-square()
+def navigateToWaypoint(X, Y):  #X is desired X,Y is desired Y
+    #assuming we have access to our x,y,theta values (position and direction of robot)
+    #take dY = Y-y;dX = X-x
+    #we need to turn (phi - theta) degrees with phi = atan2(dY,dX).
+    #then move forward a distance of sqrt(pow(dY,2)+pow(dX,2))
+    dY = Y-current[1]
+    dX = X-current[0]
+    print(dY)
+    print(dX)
+    phi = atan2(dY,dX)
+    dist = sqrt(pow(dY,2)+pow(dX,2))
+    if dX>0:
+        angle = phi - current[2] #align with point if dX +ve
+    else:
+        angle = phi - (current[2]) #offset by pi if dX -ve
+    print(angle*180/pi)
+    print(dist)
+    right(angle*180/pi)
+    forward(dist) #idk if this is how it works in python
+    
+    new_pos = current
+    return new_pos
+
+
+current = navigateToWaypoint(20,0, current)
+
 interface.terminate()
