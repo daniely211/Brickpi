@@ -78,7 +78,7 @@ def generate_particles_from_movement(current, D):
       for i in range(100):
             e = random.gauss(0, 3)
             f = random.gauss(0, 0.02)
-            new_point = (x + (D + e)*cos(theta), y + (D + e)*sin(theta), theta + f)
+            new_point = (200*(x + (D + e)*cos(theta)), 200*(y + (D + e)*sin(theta)), theta + f)
             new_points.append(new_point)
       return new_points
 def generate_particles_from_turn(current, angle):
