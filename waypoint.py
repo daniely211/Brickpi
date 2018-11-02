@@ -8,11 +8,22 @@ def navigateToWaypoint(X, Y, current):  #X is desired X,Y is desired Y
     #then move forward a distance of sqrt(pow(dY,2)+pow(dX,2))
     dY = Y-current[1]
     dX = X-current[0]
+    print(dY)
+    print(dX)
     phi = math.atan2(dY,dX)
     dist = math.sqrt(math.pow(dY,2)+math.pow(dX,2))
     if dX>0:
         angle = phi - current[2] #align with point if dX +ve
     else:
         angle = phi - (current[2]-math.pi) #offset by pi if dX -ve
+    print(angle)
+    print(dist)
     right(angle)
     forward(dist) #idk if this is how it works in python
+
+
+
+
+
+current = (0,0,0)
+nagivatetoWaypoint(10,10,current)
