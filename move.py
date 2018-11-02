@@ -106,11 +106,10 @@ def square():
                 #plot the points
                 print("drawLine:" + str(line))
                 print("drawParticles:" + str(particles))
-	  time.sleep(0.2)        
-	  left(90)
+	time.sleep(0.2)        
+	left(90)
         current = (current[0], current[1], current[2] + pi/2)
         particles = generate_particles_from_turn(current, pi/2)
-        current =
         #plot the new points
         print("drawParticles:" + str(particles))
 

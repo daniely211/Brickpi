@@ -16,6 +16,6 @@ while True:
 	else:
 		print "Failed US reading"
 
-	time.sleep(0.05)
+	time.sleep(0.5)
 
 interface.terminate()
