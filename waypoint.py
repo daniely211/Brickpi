@@ -16,3 +16,7 @@ def navigateToWaypoint(X, Y, current):  #X is desired X,Y is desired Y
         angle = phi - (current[2]-math.pi) #offset by pi if dX -ve
     right(angle)
     forward(dist) #idk if this is how it works in python
+
+
+current = (0,0,0)
+navigateToWaypoint(10,10,current)
