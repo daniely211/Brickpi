@@ -122,5 +122,4 @@ def square():
         time.sleep(0.1)
 
 
-square()
 interface.terminate()
