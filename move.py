@@ -145,6 +145,6 @@ def navigateToWaypoint(X, Y):  #X is desired X,Y is desired Y
     return new_pos
 
 
-current = navigateToWaypoint(20,0, current)
-
+current = navigateToWaypoint(70,80, current)
+print(current)
 interface.terminate()
