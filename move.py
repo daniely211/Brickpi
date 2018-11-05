@@ -138,8 +138,10 @@ def navigateToWaypoint(X, Y):  #X is desired X,Y is desired Y
     print(dist)
     right(angle*180/pi)
     forward(dist) #idk if this is how it works in python
-    
     new_pos = current
+    new_pos[0]=current[0]+dX
+    new_pos[1]=current[1]+dY
+    new_pos[3]=current[3]+phi
     return new_pos
 
 
