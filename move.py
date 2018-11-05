@@ -1,6 +1,6 @@
 import brickpi 
 import time 
-from math import pi,cos,sin
+from math import pi,cos,sin,sqrt,atan2,pow
 import random 
 interface = brickpi.Interface()
 interface.initialize()
@@ -34,6 +34,8 @@ wheel_dist = 15.0
 interface.setMotorAngleControllerParameters(motors[0], motorParams)
 interface.setMotorAngleControllerParameters(motors[1], motorParams)
 
+current =  (50,50,0)
+
 def distance_to_rads(distance):
     delta = 1.02
     return 2 * pi * (distance / wheel_circ) * delta
@@ -66,60 +68,83 @@ def forward(dist):
           
           time.sleep(0.1)
 
-
-
-def generate_particles_from_movement(current, D, direction):
-    x,y,theta = current[0], current[1], current[2]
-    new_points = []
-    for i in range(100):
-        e = random.gauss(0, 3)
-        f = random.gauss(0, 0.05)
+def generate_particles_from_movement(particles, D, direction):
+    new_particles = []
+    for particle in particles:
+        e = random.gauss(0, 0.2)
+        f = random.gauss(0, 0.01)
+        x,y,theta = particle[0], particle[1], particle[2]
         if direction == 0 or direction == 2:
             # along x axis
-            #print("cos:" + str(cos(theta+f)))
-            new_point = ((x + 5.0*(D + e)*cos(theta+f)), (y + 10.0*(D + e)*sin(theta+f)), theta + f)
+            # multiply by 5 and 10 to scale the spread of particles
+            new_particle = ((x + 5.0*(D + e)*cos(theta+f)), (y + 10.0*(D + e)*sin(theta+f)), theta + f)
         else:
             #along y axis
-            #print("sin:" + str(sin(theta+f)))
-            new_point = ((x + 10.0*(D + e)*cos(theta+f)), (y + 5.0*(D + e)*sin(theta+f)), theta + f)
-        new_points.append(new_point)
-    return new_points
-def generate_particles_from_turn(current, angle):
-      x,y,theta = current[0], current[1], current[2]
-      new_points = []
-      for i in range(100):
-            g = random.gauss(0,0.1)
-            new_point = (x, y, theta + angle + g)
-            new_points.append(new_point)
-      return new_points
+            new_particle = ((x + 10.0*(D + e)*cos(theta+f)), (y + 5.0*(D + e)*sin(theta+f)), theta + f)
+        new_particles.append(new_particle)
+    return new_particles
+
+def generate_particles_from_turn(particles, angle):
+      new_particles = []
+      for particle in particles:
+            x,y,theta = particle[0],particle[1],particle[2]
+            g = random.gauss(0,0.03)
+            new_particle = (x, y, theta + angle + g)
+            new_particles.append(new_particle)
+      return new_particles
 
 def square():
-    #18.6046511628
-    current =  (10,10,0)
+    global current
+    particles = [current for i in range(100)]
     for i in range(0,4):
         for j in range(4):
                 forward(10)
-                particles = generate_particles_from_movement(current, 10.0, i)
+                particles = generate_particles_from_movement(particles, 10.0, i)
                 avgX = sum([x for (x,y,theta) in particles])/100
                 avgY = sum([y for (x,y,theta) in particles])/100
                 avgTheta = sum([theta for (x,y,theta) in particles])/100
                 line = (current[0], current[1], avgX, avgY)
-                
                 current = (avgX, avgY,avgTheta)
-                
-                
-
                 #plot the points
                 print("drawLine:" + str(line))
                 print("drawParticles:" + str(particles))
                 time.sleep(0.4)        
         left(90)
         current = (current[0], current[1], current[2] + pi/2)
-        particles = generate_particles_from_turn(current, pi/2)
+        particles = generate_particles_from_turn(particles, pi/2)
         #plot the new points
         print("drawParticles:" + str(particles))
-
         time.sleep(0.1)
 
+        
 
+def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
+    #assuming we have access to our x,y,theta values (position and direction of robot)
+    #take dY = Y-y;dX = X-x
+    #we need to turn (phi - theta) degrees with phi = atan2(dY,dX).
+    #then move forward a distance of sqrt(pow(dY,2)+pow(dX,2))
+    X,Y = waypoint[0], waypoint[1]
+    dY = Y-current[1]
+    dX = X-current[0]
+    phi = atan2(dY,dX)
+    dist = sqrt(pow(dY,2)+pow(dX,2))
+    if dX>0:
+        angle = phi - current[2] #align with point if dX +ve
+    else:
+        angle = phi - (current[2]) #offset by pi if dX -ve
+    right(angle*180/pi)
+    forward(dist) #idk if this is how it works in python
+    new_pos = (current[0]+dX, current[1]+dY, current[2]+angle)
+    return new_pos
+
+# Test for waypoint:
+#current = navigateToWaypoint((70,80))
+#print(current)
+#current = navigateToWaypoint((40,100))
+#print(current)
+#current = navigateToWaypoint((90,60))
+#print(current)
+
+#Test square:
+square()
 interface.terminate()
