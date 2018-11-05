@@ -22,13 +22,5 @@ def navigateToWaypoint(X, Y, current):  #X is desired X,Y is desired Y
     forward(dist) #idk if this is how it works in python
 
 
-<<<<<<< HEAD
 current = (0,0,0)
 navigateToWaypoint(10,10,current)
-=======
-
-
-
-current = (0,0,0)
-nagivatetoWaypoint(10,10,current)
->>>>>>> 17ffce6120c1a8a045d47d7818ed96851351b6ac
