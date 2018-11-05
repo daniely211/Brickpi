@@ -68,55 +68,50 @@ def forward(dist):
           
           time.sleep(0.1)
 
-
-
-def generate_particles_from_movement(current, D, direction):
-    x,y,theta = current[0], current[1], current[2]
-    new_points = []
-    for i in range(100):
-        e = random.gauss(0, 3)
+def generate_particles_from_movement(particles, D, direction):
+    new_particles = []
+    for particle in particles:
+        e = random.gauss(0, 2)
         f = random.gauss(0, 0.05)
+        x,y,theta = particle[0], particle[1], particle[2]
         if direction == 0 or direction == 2:
             # along x axis
             #print("cos:" + str(cos(theta+f)))
-            new_point = ((x + 5.0*(D + e)*cos(theta+f)), (y + 10.0*(D + e)*sin(theta+f)), theta + f)
+            new_particle = ((x + 5.0*(D + e)*cos(theta+f)), (y + 10.0*(D + e)*sin(theta+f)), theta + f)
         else:
             #along y axis
             #print("sin:" + str(sin(theta+f)))
-            new_point = ((x + 10.0*(D + e)*cos(theta+f)), (y + 5.0*(D + e)*sin(theta+f)), theta + f)
-        new_points.append(new_point)
-    return new_points
-def generate_particles_from_turn(current, angle):
-      x,y,theta = current[0], current[1], current[2]
-      new_points = []
-      for i in range(100):
-            g = random.gauss(0,0.1)
-            new_point = (x, y, theta + angle + g)
-            new_points.append(new_point)
-      return new_points
+            new_particle = ((x + 10.0*(D + e)*cos(theta+f)), (y + 5.0*(D + e)*sin(theta+f)), theta + f)
+        new_particles.append(new_particle)
+    return new_particles
+
+def generate_particles_from_turn(particles, angle):
+      new_particles = []
+      for particle in particles:
+            x,y,theta = particle[0],particle[1],particle[2]
+            g = random.gauss(0,0.05)
+            new_particle = (x, y, theta + angle + g)
+            new_particles.append(new_particle)
+      return new_particles
 
 def square():
-    #18.6046511628
+    particles = [(0,0,0) for i in range(100)]
     for i in range(0,4):
         for j in range(4):
                 forward(10)
-                particles = generate_particles_from_movement(current, 10.0, i)
+                particles = generate_particles_from_movement(particles, 10.0, i)
                 avgX = sum([x for (x,y,theta) in particles])/100
                 avgY = sum([y for (x,y,theta) in particles])/100
                 avgTheta = sum([theta for (x,y,theta) in particles])/100
                 line = (current[0], current[1], avgX, avgY)
-                
                 current = (avgX, avgY,avgTheta)
-                
-                
-
                 #plot the points
                 print("drawLine:" + str(line))
                 print("drawParticles:" + str(particles))
                 time.sleep(0.4)        
         left(90)
         current = (current[0], current[1], current[2] + pi/2)
-        particles = generate_particles_from_turn(current, pi/2)
+        particles = generate_particles_from_turn(particles, pi/2)
         #plot the new points
         print("drawParticles:" + str(particles))
 
