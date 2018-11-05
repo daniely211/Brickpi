@@ -71,16 +71,15 @@ def forward(dist):
 def generate_particles_from_movement(particles, D, direction):
     new_particles = []
     for particle in particles:
-        e = random.gauss(0, 2)
-        f = random.gauss(0, 0.05)
+        e = random.gauss(0, 0.5)
+        f = random.gauss(0, 0.02)
         x,y,theta = particle[0], particle[1], particle[2]
         if direction == 0 or direction == 2:
             # along x axis
-            #print("cos:" + str(cos(theta+f)))
+            # multiply by 5 and 10 to scale the spread of particles
             new_particle = ((x + 5.0*(D + e)*cos(theta+f)), (y + 10.0*(D + e)*sin(theta+f)), theta + f)
         else:
             #along y axis
-            #print("sin:" + str(sin(theta+f)))
             new_particle = ((x + 10.0*(D + e)*cos(theta+f)), (y + 5.0*(D + e)*sin(theta+f)), theta + f)
         new_particles.append(new_particle)
     return new_particles
@@ -89,13 +88,14 @@ def generate_particles_from_turn(particles, angle):
       new_particles = []
       for particle in particles:
             x,y,theta = particle[0],particle[1],particle[2]
-            g = random.gauss(0,0.05)
+            g = random.gauss(0,0.02)
             new_particle = (x, y, theta + angle + g)
             new_particles.append(new_particle)
       return new_particles
 
 def square():
-    particles = [(0,0,0) for i in range(100)]
+    current = (50,50,0)
+    particles = [(50,50,0) for i in range(100)]
     for i in range(0,4):
         for j in range(4):
                 forward(10)
@@ -138,13 +138,11 @@ def navigateToWaypoint(X, Y):  #X is desired X,Y is desired Y
     print(dist)
     right(angle*180/pi)
     forward(dist) #idk if this is how it works in python
+    
     new_pos = current
-    new_pos[0]=current[0]+dX
-    new_pos[1]=current[1]+dY
-    new_pos[3]=current[3]+phi
     return new_pos
 
 
-current = navigateToWaypoint(20,0, current)
+square()
 
 interface.terminate()
