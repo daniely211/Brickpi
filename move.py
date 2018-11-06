@@ -72,7 +72,7 @@ def generate_particles_from_movement(particles, D, direction):
     new_particles = []
     for particle in particles:
         e = random.gauss(0, 0.2)
-        f = random.gauss(0, 0.02)
+        f = random.gauss(0, 0.01)
         x,y,theta = particle[0], particle[1], particle[2]
         if direction == 0 or direction == 2:
             # along x axis
@@ -88,7 +88,7 @@ def generate_particles_from_turn(particles, angle):
       new_particles = []
       for particle in particles:
             x,y,theta = particle[0],particle[1],particle[2]
-            g = random.gauss(0,0.02)
+            g = random.gauss(0,0.03)
             new_particle = (x, y, theta + angle + g)
             new_particles.append(new_particle)
       return new_particles

@@ -51,7 +51,5 @@ def navigateToWaypoint(X, Y, current):  #X is desired X,Y is desired Y
     current[3]=current[3]+phi
 
 
-
-
 current = (0,0,0)
-navigateToWaypoint(10, 10, current)
+navigateToWaypoint(10,10,current)
