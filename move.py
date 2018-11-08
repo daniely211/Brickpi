@@ -132,7 +132,7 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
         angle = phi - current[2] #align with point if dX +ve
     else:
         angle = phi - (current[2]) #offset by pi if dX -ve
-    right(angle*180/pi)
+    left(angle*180/pi)
     forward(dist) #idk if this is how it works in python
     new_pos = (current[0]+dX, current[1]+dY, current[2]+angle)
     return new_pos
