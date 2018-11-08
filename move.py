@@ -2,6 +2,7 @@ import brickpi
 import time 
 from math import pi,cos,sin,sqrt,atan2,pow
 import random 
+import numpy
 interface = brickpi.Interface()
 interface.initialize()
 
@@ -34,7 +35,7 @@ wheel_dist = 15.0
 interface.setMotorAngleControllerParameters(motors[0], motorParams)
 interface.setMotorAngleControllerParameters(motors[1], motorParams)
 
-current =  (50,50,0)
+current = (0,0,0)
 
 def distance_to_rads(distance):
     delta = 1.02
@@ -132,19 +133,31 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
         angle = phi - current[2] #align with point if dX +ve
     else:
         angle = phi - (current[2]) #offset by pi if dX -ve
-    right(angle*180/pi)
+    left(angle*180/pi)
     forward(dist) #idk if this is how it works in python
     new_pos = (current[0]+dX, current[1]+dY, current[2]+angle)
-    return new_pos
+    return  new_pos
 
-# Test for waypoint:
-#current = navigateToWaypoint((70,80))
-#print(current)
-#current = navigateToWaypoint((40,100))
-#print(current)
-#current = navigateToWaypoint((90,60))
-#print(current)
+if __name__ == "__main__":
 
-#Test square:
-square()
-interface.terminate()
+    #place = ((0,0))
+    while( True  ):
+        place = input("Enter Coordinates: ")
+        place = (place[0]*100), (place[1]*100)
+        print(place)
+        current = navigateToWaypoint(place) 
+
+    
+  
+    # Test for waypoint:
+    #current = navigateToWaypoint((-10,10))
+    #print(current)
+    #current = navigateToWaypoint((0,0))
+    #current = navigateToWaypoint((40,100))
+    #print(current)
+    #current = navigateToWaypoint((90,60))
+    #print(current)
+    
+    #Test square:
+    #square()
+    interface.terminate()
