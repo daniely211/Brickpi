@@ -1,8 +1,8 @@
-import brickpi 
-import time 
+import brickpi
+import time
 from math import pi,cos,sin,sqrt,atan2,pow, exp
 from statistics import median
-import random 
+import random
 import numpy
 
 interface = brickpi.Interface()
@@ -70,7 +70,7 @@ def forward(dist):
     #adding 0.05% on the left motor below, to make it go straight
     interface.increaseMotorAngleReferences(motors,[-angle*1.0005, -angle]) # offset left wheel to keep straight line
     while not interface.motorAngleReferencesReached(motors):
-          
+
           time.sleep(0.1)
 
 def generate_particles_from_movement(particles, D, direction):
@@ -113,7 +113,7 @@ def square():
                 #plot the points
                 print("drawLine:" + str(line))
                 print("drawParticles:" + str(particles))
-                time.sleep(0.4)        
+                time.sleep(0.4)
         left(90)
         current = (current[0], current[1], current[2] + pi/2)
         particles = generate_particles_from_turn(particles, pi/2)
@@ -121,7 +121,7 @@ def square():
         print("drawParticles:" + str(particles))
         time.sleep(0.1)
 
-        
+
 def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     #assuming we have access to our x,y,theta values (position and direction of robot)
     #take dY = Y-y;dX = X-x
@@ -178,7 +178,7 @@ def find_distance(particle):
     dis = []
     for l in line_segments:
         dis.append((Distance_To_Wall(l,particle), l))
-    
+
     positive_dists = filter(lambda (m,l): m > 0, dis)
     positive_dists.sort(key = (lambda (m,l): m))
 
@@ -193,10 +193,10 @@ def find_distance(particle):
         product2 = vect_to_seg_endpoint1[1] * vect_to_seg_endpoint2[1]
         if product1 <= 0 and product2 <= 0:
             line_intersected = (m,l)
-            break  
+            break
     if line_intersected == None:
         raise ValueError('line intersected was found to be None in monte carlo function!')
-    
+
     return line_intersected
 
 
@@ -207,7 +207,7 @@ def measurement_update_from_sonar(weighted_ps):
         m, wall = find_distance(p)
         new_weight = likelihood(m,z)
         reweighted_ps.append((new_weight, p))
-    
+
     # Do normalisation
     normalised_ps = normalise_weights(reweighted_ps)
 
@@ -215,7 +215,21 @@ def measurement_update_from_sonar(weighted_ps):
 
 
     # update current position based on resampled partices
+    current = update_position(resampled_ps)
+    #^assumes output of resampling is called resampled_ps
 
+def update_position(weighted_set):
+    x = 0
+    y = 0
+    theta = 0
+    for (w,p) in weighted_set:
+        x += w*p[0]
+        y += w*p[1]
+        theta +=  w*p[2]
+    print("x:" + x)
+    print("y:" + y)
+    print("theta:" + theta)
+    current = (x,y,theta)
 
 def normalise_weights(weighted_ps):
     w_sum = sum([w for (w,p) in weighted_ps])
@@ -237,17 +251,17 @@ def sonar(estimate):
     else:
         return (estimate)
 
-        
+
 def get_sonar():
     readings = []
     for i in range(10):
         readings.append( sonar( interface.getSensorValue(ultra_port) ) )
     return median(readings)
-    
+
 
 if __name__ == "__main__":
 
-    
+
     # Get 10 readings from sonar
     # Find median of 10 readings
     # wall readings
@@ -260,10 +274,10 @@ if __name__ == "__main__":
 #        place = input("Enter Coordinates: ")
 #        place = (place[0]*100), (place[1]*100)
 #        print(place)
-#        current = navigateToWaypoint(place) 
+#        current = navigateToWaypoint(place)
 #
-    
-  
+
+
     # Test for waypoint:
     #current = navigateToWaypoint((-10,10))
     #print(current)
@@ -272,7 +286,7 @@ if __name__ == "__main__":
     #print(current)
     #current = navigateToWaypoint((90,60))
     #print(current)
-    
+
     #Test square:
     #square()
     interface.terminate()
