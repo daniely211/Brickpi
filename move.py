@@ -1,10 +1,14 @@
 import brickpi 
 import time 
 from math import pi,cos,sin,sqrt,atan2,pow
+from statistics import median
 import random 
 import numpy
+
 interface = brickpi.Interface()
 interface.initialize()
+ultra_port = 0
+interface.sensorEnable( ultra_port, brickpi.SensorType.SENSOR_ULTRASONIC)
 
 motors = [0,2]
 left_touch_port = 1
@@ -173,15 +177,43 @@ def Intersects_wall(particles)
         dis_to_wall = [(0-particle[1])/ma, ] #AO, BC, DB, EF, GH, AB, DE, FG, OH
 
 
+def sonar(estimate):
+    mL = 0.876923076923
+    cL = 4.06153846154
+    mH = 1.17297297297
+    mH = 1.17297297297
+    if (estimate > 145):
+        return (mH * estimate + cH )
+    elif (estimate < 20):
+        return (mL * estimate + cL)
+    else:
+        return (estimate)
+
+        
+def get_sonar():
+    readings = []
+    for i in range(10):
+        readings.append( sonar( interface.getSensorValue(ultra_port) ) )
+    return median(readings)
+    
+
 if __name__ == "__main__":
 
-    #place = ((0,0))
-    while( True  ):
-        place = input("Enter Coordinates: ")
-        place = (place[0]*100), (place[1]*100)
-        print(place)
-        current = navigateToWaypoint(place) 
+    
+    # Get 10 readings from sonar
+    # Find median of 10 readings
+    # wall readings
+    v = get_sonar();
 
+
+
+#place = ((0,0))
+#    while( True  ):
+#        place = input("Enter Coordinates: ")
+#        place = (place[0]*100), (place[1]*100)
+#        print(place)
+#        current = navigateToWaypoint(place) 
+#
     
   
     # Test for waypoint:
