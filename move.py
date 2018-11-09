@@ -194,7 +194,8 @@ def find_distance(particle):
         if product1 <= 0 and product2 <= 0:
             line_intersected = (m,l)
             break  
-
+    if line_intersected == None:
+        raise ValueError('line intersected was found to be None in monte carlo function!')
 
 def monte_carlo_localisation(weighted_ps): #pass particles
     z = get_sonar()
