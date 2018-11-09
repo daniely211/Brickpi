@@ -127,6 +127,8 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     #take dY = Y-y;dX = X-x
     #we need to turn (phi - theta) degrees with phi = atan2(dY,dX).
     #then move forward a distance of sqrt(pow(dY,2)+pow(dX,2))
+    global current
+    particles = [current for i in range(100)]
     X,Y = waypoint[0], waypoint[1]
     dY = Y-current[1]
     dX = X-current[0]
@@ -137,9 +139,13 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     else:
         angle = phi - (current[2]) #offset by pi if dX -ve
     left(angle*180/pi)
+    particles = generate_particles_from_turn(particles, angle)
     forward(dist) #idk if this is how it works in python
-    new_pos = (current[0]+dX, current[1]+dY, current[2]+angle)
-    return  new_pos
+    particles = generate_particles_from_movement(particles, dist)
+    # ^ requires particles from movement to have consistent behaivour (no i) to work.
+    current = monte_carlo(particles)
+    # ^ requires monte_carlo function to exist
+    return  current
 
 def Distance_To_Wall(line, particle):
     point1, point2 = line[0], line[1]
@@ -216,7 +222,7 @@ def measurement_update_from_sonar(weighted_ps):
 
     # update current position based on resampled partices
     current = update_position(resampled_ps)
-    #^assumes output of resampling is called resampled_ps
+    # ^assumes output of resampling is called resampled_ps
 
 def update_position(weighted_set):
     x = 0
@@ -230,6 +236,7 @@ def update_position(weighted_set):
     print("y:" + y)
     print("theta:" + theta)
     current = (x,y,theta)
+    return current
 
 def normalise_weights(weighted_ps):
     w_sum = sum([w for (w,p) in weighted_ps])
@@ -270,14 +277,14 @@ if __name__ == "__main__":
 
 #waypoint test Lab 5
     #current = (84,30,0)
-    #current = navigateToWaypoint(180,30)
-    #current = navigateToWaypoint(180,54)
-    #current = navigateToWaypoint(138,54)
-    #current = navigateToWaypoint(138,168)
-    #current = navigateToWaypoint(114,168)
-    #current = navigateToWaypoint(114,84)
-    #current = navigateToWaypoint(84,84)
-    #current = navigateToWaypoint(84,30)
+    #current = navigateToWaypoint((180,30))
+    #current = navigateToWaypoint((180,54))
+    #current = navigateToWaypoint((138,54))
+    #current = navigateToWaypoint((138,168))
+    #current = navigateToWaypoint((114,168))
+    #current = navigateToWaypoint((114,84))
+    #current = navigateToWaypoint((84,84))
+    #current = navigateToWaypoint((84,30))
 
 
 #place = ((0,0))
