@@ -268,6 +268,17 @@ if __name__ == "__main__":
     v = get_sonar();
 
 
+#waypoint test Lab 5
+    #current = (84,30,0)
+    #current = navigateToWaypoint(180,30)
+    #current = navigateToWaypoint(180,54)
+    #current = navigateToWaypoint(138,54)
+    #current = navigateToWaypoint(138,168)
+    #current = navigateToWaypoint(114,168)
+    #current = navigateToWaypoint(114,84)
+    #current = navigateToWaypoint(84,84)
+    #current = navigateToWaypoint(84,30)
+
 
 #place = ((0,0))
 #    while( True  ):
