@@ -118,7 +118,6 @@ def square():
         time.sleep(0.1)
 
         
-
 def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     #assuming we have access to our x,y,theta values (position and direction of robot)
     #take dY = Y-y;dX = X-x
@@ -137,6 +136,42 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     forward(dist) #idk if this is how it works in python
     new_pos = (current[0]+dX, current[1]+dY, current[2]+angle)
     return  new_pos
+
+def Distance_To_Wall(point1, point2, particle):
+    A = ((point2[1]-point1[0])*(point1[0]-particle[0]))-((point2[0]-point1[0])*(point1[1]-particle[1]))
+    B = (point2[1]-point1[1])*math.cos(particle[2])-(point2[0]-point1[0]*math.sin(particle[2]))
+    if B == 0:
+        return float("inf")
+    else:
+        return (A/B)
+
+def Find_Distance(particle):
+    P = [(0,0),(0, 168),(84,168),(84,126),(84,210),(168,210),(168,84),(210,84),(210,0)]
+    dis = []
+    dis.append(Distance_To_Wall(P[1],P[0],particle))
+    dis.append(Distance_To_Wall(P[2],P[1],particle))
+    dis.append(Distance_To_Wall(P[3],P[2],particle))
+    dis.append(Distance_To_Wall(P[4],P[2],particle))
+    dis.append(Distance_To_Wall(P[5],P[4],particle))
+    dis.append(Distance_To_Wall(P[6],P[5],particle))
+    dis.append(Distance_To_Wall(P[7],P[6],particle))
+    dis.append(Distance_To_Wall(P[8],P[7],particle))
+    dis.append(Distance_To_Wall(P[0],P[8],particle))
+    #Figure out which is the correct distance in dis
+
+
+
+def Monte_Carlo_localisation() #pass particels
+    distance = Intersects_Wall([particles)
+    dis = [] #weights to be determined 
+    for i in range(100)
+        weight.append(Find_Distance(particle[i]))
+
+def Intersects_wall(particles)
+    distance = []
+    for particle in particles:
+        dis_to_wall = [(0-particle[1])/ma, ] #AO, BC, DB, EF, GH, AB, DE, FG, OH
+
 
 if __name__ == "__main__":
 
