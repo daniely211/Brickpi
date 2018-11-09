@@ -198,9 +198,10 @@ def find_distance(particle):
         raise ValueError('line intersected was found to be None in monte carlo function!')
     
     return line_intersected
-def monte_carlo_localisation(weighted_ps): #pass particles
+
+
+def measurement_update_from_sonar(weighted_ps):
     z = get_sonar()
-    dis = [] #weights to be determined
     reweighted_ps = []
     for (w,p) in weighted_ps:
         m, wall = find_distance(p)
@@ -209,6 +210,12 @@ def monte_carlo_localisation(weighted_ps): #pass particles
     
     # Do normalisation
     normalised_ps = normalise_weights(reweighted_ps)
+
+    # resample based on new weights
+
+
+    # update current position based on resampled partices
+
 
 def normalise_weights(weighted_ps):
     w_sum = sum([w for (w,p) in weighted_ps])
