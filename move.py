@@ -1,6 +1,6 @@
 import brickpi 
 import time 
-from math import pi,cos,sin,sqrt,atan2,pow
+from math import pi,cos,sin,sqrt,atan2,pow, exp
 import random 
 import numpy
 interface = brickpi.Interface()
@@ -137,7 +137,8 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     new_pos = (current[0]+dX, current[1]+dY, current[2]+angle)
     return  new_pos
 
-def Distance_To_Wall(point1, point2, particle):
+def Distance_To_Wall(line, particle):
+    point1, point2 = line[0], line[1]
     A = ((point2[1]-point1[0])*(point1[0]-particle[0]))-((point2[0]-point1[0])*(point1[1]-particle[1]))
     B = (point2[1]-point1[1])*math.cos(particle[2])-(point2[0]-point1[0]*math.sin(particle[2]))
     if B == 0:
@@ -145,34 +146,71 @@ def Distance_To_Wall(point1, point2, particle):
     else:
         return (A/B)
 
-def Find_Distance(particle):
-    P = [(0,0),(0, 168),(84,168),(84,126),(84,210),(168,210),(168,84),(210,84),(210,0)]
+def find_distance(particle):
+    x,y,theta = particle[0],particle[1],particle[2]
+    points = {
+        'O':(0,0),
+        'A':(0, 168),
+        'B':(84,168),
+        'C':(84,126),
+        'D':(84,210),
+        'E':(168,210),
+        'F':(168,84),
+        'G':(210,84),
+        'H':(210,0)
+    }
+
+    line_segments = {
+        'a'  : (points['A'], points['O']),
+        'b'  : (points['B'],points['A']),
+        'c'  : (points['C'],points['B'])
+        'c2' : (points['D'],points['B']),
+        'd'  : (points['E'],points['D']),
+        'e'  : (points['F'],points['E']),
+        'f'  : (points['G'],points['F']),
+        'g'  : (points['H'],points['G']),
+        'h'  : (points['O'],points['H'])
+    }
     dis = []
-    dis.append(Distance_To_Wall(P[1],P[0],particle))
-    dis.append(Distance_To_Wall(P[2],P[1],particle))
-    dis.append(Distance_To_Wall(P[3],P[2],particle))
-    dis.append(Distance_To_Wall(P[4],P[2],particle))
-    dis.append(Distance_To_Wall(P[5],P[4],particle))
-    dis.append(Distance_To_Wall(P[6],P[5],particle))
-    dis.append(Distance_To_Wall(P[7],P[6],particle))
-    dis.append(Distance_To_Wall(P[8],P[7],particle))
-    dis.append(Distance_To_Wall(P[0],P[8],particle))
+    for l in line_segments:
+        dis.append((Distance_To_Wall(l,particle), l))
+    
+    positive_dists = filter(lambda (m,l): m > 0, dis)
+    positive_dists.sort(key = (lambda (m,l): m))
+
     #Figure out which is the correct distance in dis
+    line_intersected = None
+    for (m,l) in positive_dists:
+        intersection = (x + m*cos(theta), y + m*sin(theta))
+        vect_to_seg_endpoint1 = (l[0][0] - intersection[0], l[0][1] - intersection[1])
+        vect_to_seg_endpoint2 = (l[1][0] - intersection[0], l[1][1] - intersection[1])
+
+        product1 = vect_to_seg_endpoint1[0] * vect_to_seg_endpoint2[0]
+        product2 = vect_to_seg_endpoint1[1] * vect_to_seg_endpoint2[1]
+        if product1 <= 0 and product2 <= 0:
+            line_intersected = (m,l)
+            break  
 
 
+def monte_carlo_localisation(weighted_ps): #pass particles
+    z = get_sonar_reading()
+    dis = [] #weights to be determined
+    reweighted_ps = []
+    for (w,p) in weighted_ps:
+        m, wall = find_distance(p)
+        new_weight = likelihood(m,z)
+        reweighted_ps.append((new_weight, p))
+    
+    # Do normalisation
+    normalised_ps = normalise_weights(reweighted_ps)
 
-def Monte_Carlo_localisation() #pass particels
-    distance = Intersects_Wall([particles)
-    dis = [] #weights to be determined 
-    for i in range(100)
-        weight.append(Find_Distance(particle[i]))
+def normalise_weights(weighted_ps):
+    w_sum = sum([w for (w,p) in weighted_ps])
+    return [(w / w_sum, p) for (w,p) in weighted_ps]
 
-def Intersects_wall(particles)
-    distance = []
-    for particle in particles:
-        dis_to_wall = [(0-particle[1])/ma, ] #AO, BC, DB, EF, GH, AB, DE, FG, OH
-
-
+def likelihood(m,z):
+    sigma = 1
+    return exp(-pow((z-m),2) / (2 * pow(sigma,2)))
 if __name__ == "__main__":
 
     #place = ((0,0))
