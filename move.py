@@ -4,6 +4,7 @@ from math import pi,cos,sin,sqrt,atan2,pow, exp
 from statistics import median
 import random
 import numpy
+from monte_carlo_localisation import resample_particle_set
 
 interface = brickpi.Interface()
 interface.initialize()
@@ -46,17 +47,17 @@ def distance_to_rads(distance):
     return 2 * pi * (distance / wheel_circ) * delta
 
 def rotate(angle, direction):
-        full_circ = 2 * pi * (wheel_dist / 2)
-        turn_circ = full_circ * (float(angle) / 360)
-        angle_rads = distance_to_rads(turn_circ) * 1.178
-        if direction == 'left':
-            interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
+    full_circ = 2 * pi * (wheel_dist / 2)
+    turn_circ = full_circ * (float(angle) / 360)
+    angle_rads = distance_to_rads(turn_circ) * 1.178
 
-        elif direction == 'right':
-            interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
+    if direction == 'left':
+        interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
+    elif direction == 'right':
+        interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
 
-        while not interface.motorAngleReferencesReached(motors):
-            time.sleep(0.1)
+    while not interface.motorAngleReferencesReached(motors):
+        time.sleep(0.1)
 
 def left(angle):
     rotate(angle, 'left')
@@ -65,58 +66,67 @@ def right(angle):
     rotate(angle, 'right')
 
 def forward(dist):
-    #dist=dist+15.1 #add the length
-    angle = 2*pi*( dist/wheel_circ )*1.07 # add 7% to calibrate
-    #adding 0.05% on the left motor below, to make it go straight
-    interface.increaseMotorAngleReferences(motors,[-angle*1.0005, -angle]) # offset left wheel to keep straight line
-    while not interface.motorAngleReferencesReached(motors):
+    # dist=dist+15.1 #add the length
+    angle = 2 * pi * (dist / wheel_circ) * 1.07 # add 7% to calibrate
+    # adding 0.05% on the left motor below, to make it go straight
+    interface.increaseMotorAngleReferences(motors, [-angle * 1.0005, -angle])
 
-          time.sleep(0.1)
+    while not interface.motorAngleReferencesReached(motors):
+        time.sleep(0.1)
 
 def generate_particles_from_movement(particles, D, direction):
     new_particles = []
+
     for particle in particles:
         e = random.gauss(0, 0.2)
         f = random.gauss(0, 0.01)
-        x,y,theta = particle[0], particle[1], particle[2]
+        x, y, theta = particle[0], particle[1], particle[2]
+
         if direction == 0 or direction == 2:
             # along x axis
             # multiply by 5 and 10 to scale the spread of particles
-            new_particle = ((x + 5.0*(D + e)*cos(theta+f)), (y + 10.0*(D + e)*sin(theta+f)), theta + f)
+            new_particle = ((x + 5.0 * (D + e) * cos(theta + f)), (y + 10.0 * (D + e) * sin(theta + f)), theta + f)
         else:
             #along y axis
-            new_particle = ((x + 10.0*(D + e)*cos(theta+f)), (y + 5.0*(D + e)*sin(theta+f)), theta + f)
+            new_particle = ((x + 10.0 * (D + e) * cos(theta + f)), (y + 5.0 * (D + e) * sin(theta + f)), theta + f)
         new_particles.append(new_particle)
+
     return new_particles
 
 def generate_particles_from_turn(particles, angle):
-      new_particles = []
-      for particle in particles:
-            x,y,theta = particle[0],particle[1],particle[2]
-            g = random.gauss(0,0.03)
-            new_particle = (x, y, theta + angle + g)
-            new_particles.append(new_particle)
-      return new_particles
+    new_particles = []
+
+    for particle in particles:
+        x,y,theta = particle[0],particle[1],particle[2]
+        g = random.gauss(0,0.03)
+        new_particle = (x, y, theta + angle + g)
+        new_particles.append(new_particle)
+
+    return new_particles
 
 def square():
     global current
     particles = [current for i in range(100)]
+
+    square_size = 10
+
     for i in range(0,4):
         for j in range(4):
-                forward(10)
-                particles = generate_particles_from_movement(particles, 10.0, i)
-                avgX = sum([x for (x,y,theta) in particles])/100
-                avgY = sum([y for (x,y,theta) in particles])/100
-                avgTheta = sum([theta for (x,y,theta) in particles])/100
-                line = (current[0], current[1], avgX, avgY)
-                current = (avgX, avgY,avgTheta)
-                #plot the points
-                print("drawLine:" + str(line))
-                print("drawParticles:" + str(particles))
-                time.sleep(0.4)
+            forward(square_size)
+            particles = generate_particles_from_movement(particles, square_size, i)
+            avgX = sum([x for (x,y,theta) in particles]) / len(particles)
+            avgY = sum([y for (x,y,theta) in particles]) / len(particles)
+            avgTheta = sum([theta for (x,y,theta) in particles]) / len(particles)
+            line = (current[0], current[1], avgX, avgY)
+            current = (avgX, avgY, avgTheta)
+            #plot the points
+            print("drawLine:" + str(line))
+            print("drawParticles:" + str(particles))
+            time.sleep(0.4)
+
         left(90)
-        current = (current[0], current[1], current[2] + pi/2)
-        particles = generate_particles_from_turn(particles, pi/2)
+        current = (current[0], current[1], current[2] + pi / 2)
+        particles = generate_particles_from_turn(particles, pi / 2)
         #plot the new points
         print("drawParticles:" + str(particles))
         time.sleep(0.1)
@@ -145,7 +155,7 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     # ^ requires particles from movement to have consistent behaivour (no i) to work.
     current = monte_carlo(particles)
     # ^ requires monte_carlo function to exist
-    return  current
+    return current
 
 def Distance_To_Wall(line, particle):
     point1, point2 = line[0], line[1]
@@ -158,6 +168,7 @@ def Distance_To_Wall(line, particle):
 
 def find_distance(particle):
     x,y,theta = particle[0],particle[1],particle[2]
+
     points = {
         'O':(0,0),
         'A':(0, 168),
@@ -205,52 +216,47 @@ def find_distance(particle):
 
     return line_intersected
 
+def measurement_update_from_sonar(weighted_set):
+    sonar_reading = get_sonar_reading()
+    reweighted_set = []
 
-def measurement_update_from_sonar(weighted_ps):
-    z = get_sonar()
-    reweighted_ps = []
-    for (w,p) in weighted_ps:
+    for (w, p) in weighted_set:
         m, wall = find_distance(p)
-        new_weight = likelihood(m,z)
-        reweighted_ps.append((new_weight, p))
-
-    # Do normalisation
-    normalised_ps = normalise_weights(reweighted_ps)
+        new_weight = likelihood(m, sonar_reading)
+        reweighted_set.append((new_weight, p))
 
     # resample based on new weights
-
+    resampled_set = resample_particle_set(reweighted_set)
 
     # update current position based on resampled partices
-    current = update_position(resampled_ps)
-    # ^assumes output of resampling is called resampled_ps
+    current = calculate_weighted_position(resampled_set)
 
-def update_position(weighted_set):
+def calculate_weighted_position(weighted_set):
     x = 0
     y = 0
     theta = 0
-    for (w,p) in weighted_set:
-        x += w*p[0]
-        y += w*p[1]
-        theta +=  w*p[2]
+
+    for (w, (x1, y1, theta1)) in weighted_set:
+        x += w * x1
+        y += w * y1
+        theta += w * theta1
+
     print("x:" + x)
     print("y:" + y)
     print("theta:" + theta)
-    current = (x,y,theta)
-    return current
 
-def normalise_weights(weighted_ps):
-    w_sum = sum([w for (w,p) in weighted_ps])
-    return [(w / w_sum, p) for (w,p) in weighted_ps]
+    return (x, y, theta)
 
-def likelihood(m,z):
+def likelihood(m, z):
     sigma = 1
-    return exp(-pow((z-m),2) / (2 * pow(sigma,2)))
+    return exp(-pow((z - m), 2) / (2 * pow(sigma, 2)))
 
-def sonar(estimate):
+def error_corrected_sonar(estimate):
     mL = 0.876923076923
     cL = 4.06153846154
     mH = 1.17297297297
     mH = 1.17297297297
+
     if (estimate > 145):
         return (mH * estimate + cH )
     elif (estimate < 20):
@@ -258,13 +264,13 @@ def sonar(estimate):
     else:
         return (estimate)
 
-
-def get_sonar():
+def get_sonar_reading():
     readings = []
-    for i in range(10):
-        readings.append( sonar( interface.getSensorValue(ultra_port) ) )
-    return median(readings)
 
+    for i in range(10):
+        readings.append(error_corrected_sonar(interface.getSensorValue(ultra_port)))
+
+    return median(readings)
 
 if __name__ == "__main__":
 
@@ -272,7 +278,7 @@ if __name__ == "__main__":
     # Get 10 readings from sonar
     # Find median of 10 readings
     # wall readings
-    v = get_sonar();
+    v = get_sonar_reading();
 
 
 #waypoint test Lab 5
