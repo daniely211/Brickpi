@@ -79,7 +79,7 @@ def generate_particles_from_movement(particles, D):
     for (x, y, theta) in particles:
         e = random.gauss(0, 0.2)
         f = random.gauss(0, 0.01)
-        new_particle = ((x + 5.0 * (D + e) * cos(theta + f)), (y + 5.0 * (D + e) * sin(theta + f)), theta + f)
+        new_particle = ((x + (D + e) * cos(theta + f)), (y + (D + e) * sin(theta + f)), theta + f)
         new_particles.append(new_particle)
 
     return new_particles
