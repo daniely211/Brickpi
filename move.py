@@ -42,13 +42,12 @@ interface.setMotorAngleControllerParameters(motors[0], motorParams)
 interface.setMotorAngleControllerParameters(motors[1], motorParams)
 
 def distance_to_rads(distance):
-    delta = 1.02
-    return 2 * pi * (distance / wheel_circ) * delta
+    return 2 * pi * (distance / wheel_circ)
 
-def rotate(angle, direction):
+def rotate(angle, direction, error = 1):
     full_circ = 2 * pi * (wheel_dist / 2)
     turn_circ = full_circ * (float(angle) / 360)
-    angle_rads = distance_to_rads(turn_circ) * 1.178
+    angle_rads = distance_to_rads(turn_circ) * error
 
     if direction == 'left':
         interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
@@ -59,7 +58,7 @@ def rotate(angle, direction):
         time.sleep(0.1)
 
 def left(angle):
-    rotate(angle, 'left')
+    rotate(angle, 'left', 1.4)
 
 def right(angle):
     rotate(angle, 'right')
@@ -79,7 +78,7 @@ def generate_particles_from_movement(particles, D):
     for (x, y, theta) in particles:
         e = random.gauss(0, 0.2)
         f = random.gauss(0, 0.01)
-        new_particle = ((x + 5.0 * (D + e) * cos(theta + f)), (y + 5.0 * (D + e) * sin(theta + f)), theta + f)
+        new_particle = ((x + (D + e) * cos(theta + f)), (y + (D + e) * sin(theta + f)), theta + f)
         new_particles.append(new_particle)
 
     return new_particles
@@ -137,6 +136,11 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     dist = sqrt(pow(dY, 2) + pow(dX, 2))
 
     angle = phi - current[2] # offset by pi if dX -ve
+
+    if angle < -pi:
+      angle += 2 * pi
+    elif angle > pi:
+      angle -= 2 * pi
 
     left(angle * 180 / pi)
     particles = generate_particles_from_turn(particles, angle)

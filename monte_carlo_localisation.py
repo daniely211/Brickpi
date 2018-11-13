@@ -1,12 +1,12 @@
 import random
 from sensors import get_sonar_reading
-from math import cos, sin
+from math import cos, sin, exp
 
 # make the sum of all particle weights to 1
 def normalise_weights(particle_set):
     sum_weights = sum([weight for (weight, point) in particle_set])
 
-    return [(float(weight) / sum_weights, point) for (weight, point) in particle_set]
+    return [(1 / float(len(particle_set)) if sum_weights == 0 else float(weight) / sum_weights, point) for (weight, point) in particle_set]
 
 # returns an array of cumulative probabilites of sampling a given particle from
 # an ordered array
@@ -38,7 +38,7 @@ def resample_particle_set(particle_set):
 
             if rand <= current_weight:
                 (w, p) = particle_set[j]
-                new_particles.append((p, normalised_weight))
+                new_particles.append((normalised_weight, p))
                 break
 
     return new_particles
@@ -53,9 +53,10 @@ def calculate_weighted_position(weighted_set):
         y += w * y1
         theta += w * theta1
 
-    print("x: " + x)
-    print("y: " + y)
-    print("theta: " + theta)
+    print("###################################")
+    print("x: " + str(x))
+    print("y: " + str(y))
+    print("theta: " + str(theta))
 
     return (x, y, theta)
 
@@ -65,6 +66,7 @@ def likelihood(m, z):
 
 def measurement_update_from_sonar(weighted_set, interface, sonar_port):
     sonar_reading = get_sonar_reading(interface, sonar_port)
+    print("sonar reading: " + str(sonar_reading))
     reweighted_set = []
 
     for (w, p) in weighted_set:
@@ -75,14 +77,16 @@ def measurement_update_from_sonar(weighted_set, interface, sonar_port):
     return reweighted_set
 
 def distance_to_wall(line, particle):
-    point1, point2 = line[0], line[1]
-    A = ((point2[1]-point1[0])*(point1[0]-particle[0]))-((point2[0]-point1[0])*(point1[1]-particle[1]))
-    B = (point2[1]-point1[1])*cos(particle[2])-(point2[0]-point1[0]*sin(particle[2]))
+    ((Ax, Ay), (Bx, By)) = line
+    (x, y, theta) = particle
 
-    if B == 0:
+    num = ((By - Ay) * (Ax - x)) - ((Bx - Ax) * (Ay - y))
+    denom = (By - Ay) * cos(theta) - (Bx - Ax) * sin(theta)
+
+    if denom == 0:
         return float("inf")
     else:
-        return (A/B)
+        return (num/denom)
 
 def find_distance(particle):
     (x, y, theta) = particle
@@ -112,24 +116,34 @@ def find_distance(particle):
     }
 
     dis = []
-    for l in line_segments:
+    for (k, l) in line_segments.items():
         dis.append((distance_to_wall(l, particle), l))
 
-    positive_dists = filter(lambda (m,l): m > 0, dis)
-    positive_dists.sort(key = (lambda (m,l): m))
+    positive_dists = filter(lambda (m, l): m > 0, dis)
+    positive_dists.sort(key = (lambda (m, l): m))
 
     #Figure out which is the correct distance in dis
     line_intersected = None
+
+    epsilon = 0.000000000000001
+
     for (m, l) in positive_dists:
         intersection = (x + m * cos(theta), y + m * sin(theta))
-        vect_to_seg_endpoint1 = (l[0][0] - intersection[0], l[0][1] - intersection[1])
-        vect_to_seg_endpoint2 = (l[1][0] - intersection[0], l[1][1] - intersection[1])
+        ((x1, y1), (x2, y2)) = l
+        #print("m: " + str(m))
+        #print("line: " + str(l))
+        vect_to_seg_endpoint1 = (x1 - intersection[0], y1 - intersection[1])
+        vect_to_seg_endpoint2 = (x2 - intersection[0], y2 - intersection[1])
 
         product1 = vect_to_seg_endpoint1[0] * vect_to_seg_endpoint2[0]
         product2 = vect_to_seg_endpoint1[1] * vect_to_seg_endpoint2[1]
 
-        if product1 <= 0 and product2 <= 0:
-            line_intersected = (m,l)
+        #print("p1: " + str(product1))
+        #print("p2: " + str(product2))
+
+        if product1 <= epsilon and product2 <= epsilon:
+            line_intersected = (m, l)
+            #print("selected")
             break
 
     if line_intersected == None:
