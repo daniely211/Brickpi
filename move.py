@@ -58,16 +58,15 @@ def rotate(angle, direction, error = 1):
         time.sleep(0.1)
 
 def left(angle):
-    rotate(angle, 'left', 1.4)
+    rotate(angle, 'left', 1.145)
 
 def right(angle):
     rotate(angle, 'right')
 
 def forward(dist):
-    # dist=dist+15.1 #add the length
-    angle = 2 * pi * (dist / wheel_circ) * 1.07 # add 7% to calibrate
+    angle = 2 * pi * (dist / wheel_circ) * 1 # add 7% to calibrate
     # adding 0.05% on the left motor below, to make it go straight
-    interface.increaseMotorAngleReferences(motors, [-angle * 1.0005, -angle])
+    interface.increaseMotorAngleReferences(motors, [-angle * 0.9995, -angle])
 
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)
