@@ -4,14 +4,16 @@ def error_corrected_sonar(estimate):
     mL = 0.876923076923
     cL = 4.06153846154
     mH = 1.17297297297
-    mH = 1.17297297297
+    cH = 15.0
+    
+    x = estimate[0]
 
-    if (estimate > 145):
-        return (mH * estimate + cH )
-    elif (estimate < 20):
-        return (mL * estimate + cL)
+    if x > 145:
+        return mH * x + cH
+    elif x < 20:
+        return mL * x + cL
     else:
-        return (estimate)
+      return x
 
 def get_sonar_reading(interface, sonar_port):
     readings = []
