@@ -150,14 +150,14 @@ if __name__ == "__main__":
 
     #waypoint test Lab 5
     current = (84,30,0)
-    current = navigateToWaypoint((180,30))
-    current = navigateToWaypoint((180,54))
-    current = navigateToWaypoint((138,54))
-    current = navigateToWaypoint((138,168))
-    current = navigateToWaypoint((114,168))
-    current = navigateToWaypoint((114,84))
-    current = navigateToWaypoint((84,84))
-    current = navigateToWaypoint((84,30))
+    current = navigate_to_waypoint((180,30))
+    current = navigate_to_waypoint((180,54))
+    current = navigate_to_waypoint((138,54))
+    current = navigate_to_waypoint((138,168))
+    current = navigate_to_waypoint((114,168))
+    current = navigate_to_waypoint((114,84))
+    current = navigate_to_waypoint((84,84))
+    current = navigate_to_waypoint((84,30))
 
 
 #place = ((0,0))
