@@ -75,14 +75,16 @@ def measurement_update_from_sonar(weighted_set, interface, sonar_port):
     return reweighted_set
 
 def distance_to_wall(line, particle):
-    point1, point2 = line[0], line[1]
-    A = ((point2[1]-point1[0])*(point1[0]-particle[0]))-((point2[0]-point1[0])*(point1[1]-particle[1]))
-    B = (point2[1]-point1[1])*cos(particle[2])-(point2[0]-point1[0]*sin(particle[2]))
+    ((Ax, Ay), (Bx,By)) = line
+    (x,y,theta) = particle
 
-    if B == 0:
+    num = ((By-Ay)*(Ax-x))-((Bx-Ax)*(Ay-y))
+    denom = (By-Ay)*cos(theta)-(Bx-Ax)*sin(theta)
+
+    if denom == 0:
         return float("inf")
     else:
-        return (A/B)
+        return (num/denom)
 
 def find_distance(particle):
     (x, y, theta) = particle
