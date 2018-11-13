@@ -2,9 +2,9 @@ import random
 
 # make the sum of all particle weights to 1
 def normalise_weights(particle_set):
-    sum_weights = sum([weight for (x, weight) in particle_set])
+    sum_weights = sum([weight for (weight, point) in particle_set])
 
-    return [(x, float(weight) / sum_weights) for (x, weight) in particle_set]
+    return [(float(weight) / sum_weights, point) for (weight, point) in particle_set]
 
 # returns an array of cumulative probabilites of sampling a given particle from
 # an ordered array
@@ -12,7 +12,7 @@ def get_cdf_array(particle_set):
     cdf_array = []
 
     for i in range(len(particle_set)):
-        (x, weight) = particle_set[i]
+        (weight, point) = particle_set[i]
 
         if i == 0:
             cdf_array.append(weight)
@@ -36,8 +36,8 @@ def resample_particle_set(particle_set):
             current_weight = cdf_array[j]
 
             if rand <= current_weight:
-                (x, w) = particle_set[j]
-                new_particles.append((x, normalised_weight))
+                (w, p) = particle_set[j]
+                new_particles.append((p, normalised_weight))
                 break
 
     return new_particles
