@@ -53,7 +53,6 @@ def calculate_weighted_position(weighted_set):
         y += w * y1
         theta += w * theta1
 
-    print("###################################")
     print("x: " + str(x))
     print("y: " + str(y))
     print("theta: " + str(theta))
@@ -66,6 +65,7 @@ def likelihood(m, z):
 
 def measurement_update_from_sonar(weighted_set, interface, sonar_port):
     sonar_reading = get_sonar_reading(interface, sonar_port)
+    print("#####################################")
     print("sonar reading: " + str(sonar_reading))
     reweighted_set = []
 
