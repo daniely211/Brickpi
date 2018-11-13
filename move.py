@@ -42,6 +42,8 @@ interface.setMotorAngleControllerParameters(motors[1], motorParams)
 
 current = (0,0,0)
 
+PARTICLES_SIZE = 100
+
 def distance_to_rads(distance):
     delta = 1.02
     return 2 * pi * (distance / wheel_circ) * delta
@@ -106,7 +108,7 @@ def generate_particles_from_turn(particles, angle):
 
 def square():
     global current
-    particles = [current for i in range(100)]
+    particles = [current for i in range(PARTICLES_SIZE)]
 
     square_size = 10
 
@@ -138,7 +140,7 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     #we need to turn (phi - theta) degrees with phi = atan2(dY,dX).
     #then move forward a distance of sqrt(pow(dY,2)+pow(dX,2))
     global current
-    particles = [current for i in range(100)]
+    particles = [current for i in range(PARTICLES_SIZE)]
     X,Y = waypoint[0], waypoint[1]
     dY = Y-current[1]
     dX = X-current[0]
@@ -153,6 +155,7 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     forward(dist) #idk if this is how it works in python
     particles = generate_particles_from_movement(particles, dist)
     # ^ requires particles from movement to have consistent behaivour (no i) to work.
+
     current = monte_carlo(particles)
     # ^ requires monte_carlo function to exist
     return current
