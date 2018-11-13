@@ -136,15 +136,11 @@ def navigateToWaypoint(waypoint):  #X is desired X,Y is desired Y
     dX = X-current[0]
     phi = atan2(dY,dX)
     dist = sqrt(pow(dY,2)+pow(dX,2))
-    if dX>0:
-        angle = phi - current[2] #align with point if dX +ve
-    else:
-        angle = phi - (current[2]) #offset by pi if dX -ve
+    angle = phi - current[2] 
     left(angle*180/pi)
     particles = generate_particles_from_turn(particles, angle)
-    forward(dist) #idk if this is how it works in python
+    forward(dist) 
     particles = generate_particles_from_movement(particles, dist)
-    # ^ requires particles from movement to have consistent behaivour (no i) to work.
     current = monte_carlo(particles)
     # ^ requires monte_carlo function to exist
     return current
@@ -266,43 +262,23 @@ def get_sonar_reading():
 
 if __name__ == "__main__":
 
-
-    # Get 10 readings from sonar
-    # Find median of 10 readings
-    # wall readings
-    #v = get_sonar_reading();
-
-
-#waypoint test Lab 5
-    #current = (84,30,0)
-    #current = navigateToWaypoint((180,30))
-    #current = navigateToWaypoint((180,54))
-    #current = navigateToWaypoint((138,54))
-    #current = navigateToWaypoint((138,168))
-    #current = navigateToWaypoint((114,168))
-    #current = navigateToWaypoint((114,84))
-    #current = navigateToWaypoint((84,84))
-    #current = navigateToWaypoint((84,30))
+    #waypoint test Lab 5
+    current = (84,30,0)
+    current = navigateToWaypoint((180,30))
+    current = navigateToWaypoint((180,54))
+    current = navigateToWaypoint((138,54))
+    current = navigateToWaypoint((138,168))
+    current = navigateToWaypoint((114,168))
+    current = navigateToWaypoint((114,84))
+    current = navigateToWaypoint((84,84))
+    current = navigateToWaypoint((84,30))
 
 
 #place = ((0,0))
 #    while( True  ):
 #        place = input("Enter Coordinates: ")
-#        place = (place[0]*100), (place[1]*100)
+#        place = (place[0]), (place[1])
 #        print(place)
 #        current = navigateToWaypoint(place)
 #
-
-
-    # Test for waypoint:
-    #current = navigateToWaypoint((-10,10))
-    #print(current)
-    #current = navigateToWaypoint((0,0))
-    #current = navigateToWaypoint((40,100))
-    #print(current)
-    #current = navigateToWaypoint((90,60))
-    #print(current)
-
-    #Test square:
-    square()
     interface.terminate()
