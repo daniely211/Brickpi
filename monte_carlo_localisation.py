@@ -6,7 +6,7 @@ from math import cos, sin, exp
 def normalise_weights(particle_set):
     sum_weights = sum([weight for (weight, point) in particle_set])
 
-    return [(float(weight) / sum_weights, point) for (weight, point) in particle_set]
+    return [(1 / float(len(particle_set)) if sum_weights == 0 else float(weight) / sum_weights, point) for (weight, point) in particle_set]
 
 # returns an array of cumulative probabilites of sampling a given particle from
 # an ordered array
@@ -66,6 +66,7 @@ def likelihood(m, z):
 
 def measurement_update_from_sonar(weighted_set, interface, sonar_port):
     sonar_reading = get_sonar_reading(interface, sonar_port)
+    print("sonar reading: " + str(sonar_reading))
     reweighted_set = []
 
     for (w, p) in weighted_set:
@@ -129,19 +130,20 @@ def find_distance(particle):
     for (m, l) in positive_dists:
         intersection = (x + m * cos(theta), y + m * sin(theta))
         ((x1, y1), (x2, y2)) = l
-        print("m: " + str(m))
-        print("line: " + str(l))
+        #print("m: " + str(m))
+        #print("line: " + str(l))
         vect_to_seg_endpoint1 = (x1 - intersection[0], y1 - intersection[1])
         vect_to_seg_endpoint2 = (x2 - intersection[0], y2 - intersection[1])
 
         product1 = vect_to_seg_endpoint1[0] * vect_to_seg_endpoint2[0]
         product2 = vect_to_seg_endpoint1[1] * vect_to_seg_endpoint2[1]
 
-        print("p1: " + str(product1))
-        print("p2: " + str(product2))
+        #print("p1: " + str(product1))
+        #print("p2: " + str(product2))
 
         if product1 <= epsilon and product2 <= epsilon:
             line_intersected = (m, l)
+            #print("selected")
             break
 
     if line_intersected == None:
