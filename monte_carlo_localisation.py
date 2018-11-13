@@ -1,6 +1,8 @@
 import random
 from sensors import get_sonar_reading
 from math import cos, sin, exp
+from map_particles import Particles
+
 
 # make the sum of all particle weights to 1
 def normalise_weights(particle_set):
@@ -165,5 +167,9 @@ def monte_carlo_localisation(particles, interface, sonar_port):
 
     # resample points
     particle_set = resample_particle_set(particle_set)
+
+    particles_map = Particles()
+    particles_map.update(particle_set)
+    particles_map.draw()
 
     return calculate_weighted_position(particle_set)
