@@ -148,43 +148,23 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
 
 if __name__ == "__main__":
 
-
-    # Get 10 readings from sonar
-    # Find median of 10 readings
-    # wall readings
-    #v = get_sonar_reading();
-
-
-#waypoint test Lab 5
-    #current = (84,30,0)
-    #current = navigate_to_waypoint((180,30))
-    #current = navigate_to_waypoint((180,54))
-    #current = navigate_to_waypoint((138,54))
-    #current = navigate_to_waypoint((138,168))
-    #current = navigate_to_waypoint((114,168))
-    #current = navigate_to_waypoint((114,84))
-    #current = navigate_to_waypoint((84,84))
-    #current = navigate_to_waypoint((84,30))
+    #waypoint test Lab 5
+    current = (84,30,0)
+    current = navigateToWaypoint((180,30))
+    current = navigateToWaypoint((180,54))
+    current = navigateToWaypoint((138,54))
+    current = navigateToWaypoint((138,168))
+    current = navigateToWaypoint((114,168))
+    current = navigateToWaypoint((114,84))
+    current = navigateToWaypoint((84,84))
+    current = navigateToWaypoint((84,30))
 
 
 #place = ((0,0))
 #    while( True  ):
 #        place = input("Enter Coordinates: ")
-#        place = (place[0]*100), (place[1]*100)
+#        place = (place[0]), (place[1])
 #        print(place)
 #        current = navigate_to_waypoint(place)
 #
-
-
-    # Test for waypoint:
-    #current = navigate_to_waypoint((-10,10))
-    #print(current)
-    #current = navigate_to_waypoint((0,0))
-    #current = navigate_to_waypoint((40,100))
-    #print(current)
-    #current = navigate_to_waypoint((90,60))
-    #print(current)
-
-    #Test square:
-    square()
     interface.terminate()
