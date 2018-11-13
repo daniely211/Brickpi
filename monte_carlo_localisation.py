@@ -75,7 +75,7 @@ def measurement_update_from_sonar(weighted_set, interface, sonar_port):
     return reweighted_set
 
 def distance_to_wall(line, particle):
-    point1, point2 = line[0], line[1]
+    (point1, point2) = line
     A = ((point2[1]-point1[0])*(point1[0]-particle[0]))-((point2[0]-point1[0])*(point1[1]-particle[1]))
     B = (point2[1]-point1[1])*cos(particle[2])-(point2[0]-point1[0]*sin(particle[2]))
 
@@ -112,14 +112,15 @@ def find_distance(particle):
     }
 
     dis = []
-    for l in line_segments:
+    for (k, l) in line_segments.items():
         dis.append((distance_to_wall(l, particle), l))
 
-    positive_dists = filter(lambda (m,l): m > 0, dis)
-    positive_dists.sort(key = (lambda (m,l): m))
+    positive_dists = filter(lambda (m, l): m > 0, dis)
+    positive_dists.sort(key = (lambda (m, l): m))
 
     #Figure out which is the correct distance in dis
     line_intersected = None
+
     for (m, l) in positive_dists:
         intersection = (x + m * cos(theta), y + m * sin(theta))
         vect_to_seg_endpoint1 = (l[0][0] - intersection[0], l[0][1] - intersection[1])
@@ -129,7 +130,7 @@ def find_distance(particle):
         product2 = vect_to_seg_endpoint1[1] * vect_to_seg_endpoint2[1]
 
         if product1 <= 0 and product2 <= 0:
-            line_intersected = (m,l)
+            line_intersected = (m, l)
             break
 
     if line_intersected == None:
