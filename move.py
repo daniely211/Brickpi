@@ -1,7 +1,6 @@
 import brickpi
 import time
 from math import pi,cos,sin,sqrt,atan2,pow, exp
-from statistics import median
 import random
 import numpy
 from monte_carlo_localisation import resample_particle_set
@@ -76,21 +75,14 @@ def forward(dist):
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)
 
-def generate_particles_from_movement(particles, D, direction):
+def generate_particles_from_movement(particles, D):
     new_particles = []
 
     for particle in particles:
         e = random.gauss(0, 0.2)
         f = random.gauss(0, 0.01)
         x, y, theta = particle[0], particle[1], particle[2]
-
-        if direction == 0 or direction == 2:
-            # along x axis
-            # multiply by 5 and 10 to scale the spread of particles
-            new_particle = ((x + 5.0 * (D + e) * cos(theta + f)), (y + 10.0 * (D + e) * sin(theta + f)), theta + f)
-        else:
-            #along y axis
-            new_particle = ((x + 10.0 * (D + e) * cos(theta + f)), (y + 5.0 * (D + e) * sin(theta + f)), theta + f)
+        new_particle = ((x + 5.0 * (D + e) * cos(theta + f)), (y + 5.0 * (D + e) * sin(theta + f)), theta + f)  
         new_particles.append(new_particle)
 
     return new_particles
@@ -115,7 +107,7 @@ def square():
     for i in range(0,4):
         for j in range(4):
             forward(square_size)
-            particles = generate_particles_from_movement(particles, square_size, i)
+            particles = generate_particles_from_movement(particles, square_size)
             avgX = sum([x for (x,y,theta) in particles]) / len(particles)
             avgY = sum([y for (x,y,theta) in particles]) / len(particles)
             avgTheta = sum([theta for (x,y,theta) in particles]) / len(particles)
@@ -187,7 +179,7 @@ def find_distance(particle):
     line_segments = {
         'a'  : (points['A'], points['O']),
         'b'  : (points['B'],points['A']),
-        'c'  : (points['C'],points['B'])
+        'c'  : (points['C'],points['B']),
         'c2' : (points['D'],points['B']),
         'd'  : (points['E'],points['D']),
         'e'  : (points['F'],points['E']),
@@ -273,7 +265,7 @@ def get_sonar_reading():
     for i in range(10):
         readings.append(error_corrected_sonar(interface.getSensorValue(ultra_port)))
 
-    return median(readings)
+    return numpy.median(readings)
 
 if __name__ == "__main__":
 
@@ -281,7 +273,7 @@ if __name__ == "__main__":
     # Get 10 readings from sonar
     # Find median of 10 readings
     # wall readings
-    v = get_sonar_reading();
+    #v = get_sonar_reading();
 
 
 #waypoint test Lab 5
@@ -315,5 +307,5 @@ if __name__ == "__main__":
     #print(current)
 
     #Test square:
-    #square()
+    square()
     interface.terminate()
