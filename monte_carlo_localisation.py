@@ -186,6 +186,8 @@ def monte_carlo_localisation(particles, interface, sonar_port):
     # generate weighted set of particles where w = 1 / N for all particles
     w = 1 / float(len(particles))
     particle_set = [(w, p) for p in particles]
+    particle_set = check_bounds(particle_set)
+
 
     # adjust weight using likelihood function
     particle_set = measurement_update_from_sonar(particle_set, interface, sonar_port)
@@ -197,7 +199,6 @@ def monte_carlo_localisation(particles, interface, sonar_port):
     particle_set = resample_particle_set(particle_set)
 
 
-    particle_set = check_bounds(particle_set)
 
     particles_map = Particles()
     particles_map.update(particle_set)
