@@ -45,7 +45,7 @@ def resample_particle_set(particle_set):
 
     return new_particles
 
-def calculate_weighted_position(weighted_set):
+def calculate2_weighted_position(weighted_set):
     x = 0
     y = 0
     theta = 0
@@ -153,6 +153,17 @@ def find_distance(particle):
 
     return line_intersected
 
+def check_bounds(particle_set):
+    for  for (w, (x, y, theta)) in weighted_set: in range particle_set:
+        if(x<0 | x>210):
+            w=0
+        if(y>210 | y<0):
+            w=0
+        if(x<84 && y>168):
+            w=0
+        if(x>168 && y>84):    
+            w=0
+    return particle_set
 
 def monte_carlo_localisation(particles, interface, sonar_port):
     # generate weighted set of particles where w = 1 / N for all particles
@@ -167,6 +178,9 @@ def monte_carlo_localisation(particles, interface, sonar_port):
 
     # resample points
     particle_set = resample_particle_set(particle_set)
+
+
+    particle_set = check_bounds(particle_set)
 
     particles_map = Particles()
     particles_map.update(particle_set)
