@@ -154,16 +154,33 @@ def find_distance(particle):
     return line_intersected
 
 def check_bounds(particle_set):
-    for  for (w, (x, y, theta)) in weighted_set: in range particle_set:
-        if(x<0 | x>210):
-            w=0
-        if(y>210 | y<0):
-            w=0
-        if(x<84 && y>168):
-            w=0
-        if(x>168 && y>84):    
-            w=0
-    return particle_set
+    bounded_set = []
+    for (w, (x, y, theta)) in particle_set:
+        if(x<0 or y < 0):
+            newX = 0
+            newY = 0
+            newW = 0
+            bounded_set.append((newW,(newX,newY,theta)))
+            
+        elif(y>210 or x >210):
+            newX = 0
+            newY = 0
+            newW = 0
+            bounded_set.append((newW,(newX,newY,theta)))
+            
+        elif(x<84 and y>168):
+            newX = 84
+            newY = 168
+            newW=0
+            bounded_set.append((newW,(newX,newY,theta)))
+        elif(x>168 and y>84):    
+            newX = 168
+            newY = 84
+            newW=0
+            bounded_set.append((newW,(newX,newY,theta)))
+        else:
+            bounded_set.append((w,(x,y,theta)))
+    return bounded_set
 
 def monte_carlo_localisation(particles, interface, sonar_port):
     # generate weighted set of particles where w = 1 / N for all particles
