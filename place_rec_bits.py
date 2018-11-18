@@ -5,6 +5,36 @@
 import random
 import os
 
+interface=brickpi.Interface()
+interface.initialize()
+
+motors = [3]
+
+interface.motorEnable(motors[0])
+
+motorParams = interface.MotorAngleControllerParameters()
+motorParams.maxRotationAcceleration = 6.0
+motorParams.maxRotationSpeed = 12.0
+motorParams.feedForwardGain = 255/20.0
+motorParams.minPWM = 18.0
+motorParams.pidParameters.minOutput = -255
+motorParams.pidParameters.maxOutput = 255
+
+# Adjust PID parameters, Ziegler-Nicholls method
+motorParams.pidParameters.k_p = 250.0
+motorParams.pidParameters.k_i = 400.
+motorParams.pidParameters.K_d = 32.0
+
+kp = motorParams.pidParameters.k_p
+ki = motorParams.pidParameters.k_i
+kd = motorParams.pidParameters.K_d
+
+interface.setMotorAngleControllerParameters(motors[0],motorParams)
+
+port = 0 # port which ultrasoic sensor is plugged in to
+interface.sensorEnable(port, brickpi.SensorType.SENSOR_ULTRASONIC);
+
+
 # Location signature class: stores a signature characterizing one location
 class LocationSignature:
     def __init__(self, no_bins = 360):
@@ -80,9 +110,18 @@ class SignatureContainer():
 # FILL IN: spin robot or sonar to capture a signature and store it in ls
 def characterize_location(ls):
     # print "TODO:    You should implement the function that captures a signature."
-
-    for i in range(len(ls.sig)):
-        ls.sig[i] = random.randint(0, 255)
+    # spin the sensor 360 exactly
+    # take 360 readings exactly
+    i = 0
+    while not interface.motorAngleReferencesReached(motors):
+          motorAngles = interface.getMotorAngles(motors)
+          print(interface.getMotorAngleReferences(motors))
+          (reading, _) = interface.getSensorValue(port)
+          ls.sig[i] = reading
+          i = i + 1
+          time.sleep(0.1)
+    # for i in range(len(ls.sig)):
+    #     ls.sig[i] = random.randint(0, 255)
 
 # FILL IN: compare two signatures
 def compare_signatures(ls1, ls2):
