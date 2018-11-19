@@ -45,7 +45,7 @@ interface.setMotorAngleControllerParameters(motors[1], motorParams)
 def distance_to_rads(distance):
     return 2 * pi * (distance / wheel_circ)
 
-def rotate(angle, direction, error = 1, interface):
+def rotate(interface, angle, direction, error = 1):
     full_circ = 2 * pi * (wheel_dist / 2)
     turn_circ = full_circ * (float(angle) / 360)
     angle_rads = distance_to_rads(turn_circ) * error
@@ -59,10 +59,10 @@ def rotate(angle, direction, error = 1, interface):
         time.sleep(0.1)
 
 def left(angle, interface):
-    rotate(angle, 'left', 1.163, interface)
+    rotate(interface, angle, 'left', 1.163)
 
 def right(angle, interface):
-    rotate(angle, 'right', 1.158, interface)
+    rotate(interface, angle, 'right', 1.158)
 
 def forward(dist, interface):
     angle = 2 * pi * (dist / wheel_circ) * 1.04 # add 7% to calibrate
