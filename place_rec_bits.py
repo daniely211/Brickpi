@@ -113,16 +113,20 @@ def characterize_location(ls):
     # spin the sensor 360 exactly
     # take 360 readings exactly
     i = 0
-    while not interface.motorAngleReferencesReached(motors):
-          motorAngles = interface.getMotorAngles(motors)
-          print(interface.getMotorAngleReferences(motors))
-          (reading, _) = interface.getSensorValue(port)
-          ls.sig[i] = reading
-          i = i + 1
-          time.sleep(0.1)
+    # while not interface.motorAngleReferencesReached(motors):
+    #       motorAngles = interface.getMotorAngles(motors)
+    #       print(interface.getMotorAngleReferences(motors))
+    #       (reading, _) = interface.getSensorValue(port)
+    #       ls.sig[i] = reading
+    #       i = i + 1
+    #       time.sleep(0.1)
+    for i in range(72):
+        right(5)
+        (reading, _) = interface.getSensorValue(port)
+        ls.sig[i] = reading
     # for i in range(len(ls.sig)):
     #     ls.sig[i] = random.randint(0, 255)
-
+    return ls
 # FILL IN: compare two signatures
 def compare_signatures(ls1, ls2):
     dist = 0
@@ -169,6 +173,8 @@ def recognize_location():
 
 signatures = SignatureContainer(5);
 #signatures.delete_loc_files()
-
-learn_location();
-recognize_location();
+ls = LocationSignature(72)
+# learn_location();
+# recognize_location();
+characterize_location(ls)
+ls.print_signature()
