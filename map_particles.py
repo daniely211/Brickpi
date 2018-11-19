@@ -93,9 +93,9 @@ mymap.draw();
 
 particles = Particles();
 
-t = 0;
-while True:
-    particles.update();
-    particles.draw();
-    t += 0.05;
-    time.sleep(0.05);
+# t = 0;
+# while True:
+#     particles.update();
+#     particles.draw();
+#     t += 0.05;
+#     time.sleep(0.05);
