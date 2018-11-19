@@ -4,36 +4,39 @@
 
 import random
 import os
+import brickpi
+import time
+from move import left,right,forward,interface
 
-interface=brickpi.Interface()
-interface.initialize()
+#interface=brickpi.Interface()
+# interface.initialize()
 
-motors = [3]
+# motors = [3]
 
-interface.motorEnable(motors[0])
+# interface.motorEnable(motors[0])
 
-motorParams = interface.MotorAngleControllerParameters()
-motorParams.maxRotationAcceleration = 6.0
-motorParams.maxRotationSpeed = 12.0
-motorParams.feedForwardGain = 255/20.0
-motorParams.minPWM = 18.0
-motorParams.pidParameters.minOutput = -255
-motorParams.pidParameters.maxOutput = 255
+# motorParams = interface.MotorAngleControllerParameters()
+# motorParams.maxRotationAcceleration = 6.0
+# motorParams.maxRotationSpeed = 12.0
+# motorParams.feedForwardGain = 255/20.0
+# motorParams.minPWM = 18.0
+# motorParams.pidParameters.minOutput = -255
+# motorParams.pidParameters.maxOutput = 255
 
-# Adjust PID parameters, Ziegler-Nicholls method
-motorParams.pidParameters.k_p = 250.0
-motorParams.pidParameters.k_i = 400.
-motorParams.pidParameters.K_d = 32.0
+# # Adjust PID parameters, Ziegler-Nicholls method
+# motorParams.pidParameters.k_p = 250.0
+# motorParams.pidParameters.k_i = 400.
+# motorParams.pidParameters.K_d = 32.0
 
-kp = motorParams.pidParameters.k_p
-ki = motorParams.pidParameters.k_i
-kd = motorParams.pidParameters.K_d
+# kp = motorParams.pidParameters.k_p
+# ki = motorParams.pidParameters.k_i
+# kd = motorParams.pidParameters.K_d
 
-interface.setMotorAngleControllerParameters(motors[0],motorParams)
-
+# interface.setMotorAngleControllerParameters(motors[0],motorParams)
 port = 0 # port which ultrasoic sensor is plugged in to
-interface.sensorEnable(port, brickpi.SensorType.SENSOR_ULTRASONIC);
+# interface.sensorEnable(port, brickpi.SensorType.SENSOR_ULTRASONIC);
 
+TURNING_ANGLE = 5
 
 # Location signature class: stores a signature characterizing one location
 class LocationSignature:
@@ -121,7 +124,7 @@ def characterize_location(ls):
     #       i = i + 1
     #       time.sleep(0.1)
     for i in range(72):
-        right(5)
+        right(TURNING_ANGLE, interface)
         (reading, _) = interface.getSensorValue(port)
         ls.sig[i] = reading
     # for i in range(len(ls.sig)):
@@ -133,14 +136,14 @@ def compare_signatures(ls1, ls2):
     #print "TODO:    You should implement the function that compares two signatures."
     Hm = ls1.sig #Hm is the histogram generated from current point
     Hk = ls2.sig #Hk is histogram of saved point.
-    for i in range(length(Hm))
+    for i in range(length(Hm)):
         dist += Hm[i]-Hk[i] #from lecture slides.
     return dist
 
 # This function characterizes the current location, and stores the obtained
 # signature into the next available file.
 def learn_location():
-    ls = LocationSignature()
+    ls = LocationSignature(int(360/TURNING_ANGLE))
     characterize_location(ls)
     idx = signatures.get_free_index();
     if (idx == -1): # run out of signature files
@@ -165,20 +168,30 @@ def recognize_location():
     characterize_location(ls_obs);
 
     # FILL IN: COMPARE ls_read with ls_obs and find the best match
+    sig_map = [0] * signatures.size
     for idx in range(signatures.size):
         print "STATUS:  Comparing signature " + str(idx) + " with the observed signature."
         ls_read = signatures.read(idx);
         dist    = compare_signatures(ls_obs, ls_read)
-
+        sig_map[idx] = dist
+    
+    minDist = sig_map[0]
+    minSig = 0
+    for i in range(signatures.size):
+        if (sig_map[i]<minDist):
+            minSig = i
+            minDist = sig_map[i]
+    return minDist, minSig
 # Prior to starting learning the locations, it should delete files from previous
 # learning either manually or by calling signatures.delete_loc_files().
 # Then, either learn a location, until all the locations are learned, or try to
 # recognize one of them, if locations have already been learned.
 
-signatures = SignatureContainer(5);
+signatures = SignatureContainer(5)
 #signatures.delete_loc_files()
-ls = LocationSignature(72)
-# learn_location();
-# recognize_location();
-characterize_location(ls)
-ls.print_signature()
+for i in range(5):
+    learn_location()
+    print("DONE WITH LOCATION")
+    time.sleep(5)
+#print(recognize_location())
+

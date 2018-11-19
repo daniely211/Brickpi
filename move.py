@@ -45,7 +45,7 @@ interface.setMotorAngleControllerParameters(motors[1], motorParams)
 def distance_to_rads(distance):
     return 2 * pi * (distance / wheel_circ)
 
-def rotate(angle, direction, error = 1):
+def rotate(angle, direction, error = 1, interface):
     full_circ = 2 * pi * (wheel_dist / 2)
     turn_circ = full_circ * (float(angle) / 360)
     angle_rads = distance_to_rads(turn_circ) * error
@@ -58,13 +58,13 @@ def rotate(angle, direction, error = 1):
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)
 
-def left(angle):
-    rotate(angle, 'left', 1.163)
+def left(angle, interface):
+    rotate(angle, 'left', 1.163, interface)
 
-def right(angle):
-    rotate(angle, 'right', 1.158)
+def right(angle, interface):
+    rotate(angle, 'right', 1.158, interface)
 
-def forward(dist):
+def forward(dist, interface):
     angle = 2 * pi * (dist / wheel_circ) * 1.04 # add 7% to calibrate
     # adding 0.05% on the left motor below, to make it go straight
     interface.increaseMotorAngleReferences(motors, [-angle * 1.06, -angle])
@@ -113,7 +113,7 @@ def square():
             print("drawParticles:" + str(particles))
             time.sleep(0.4)
 
-        left(90)
+        left(90, interface)
         current = (current[0], current[1], current[2] + pi / 2)
         particles = generate_particles_from_turn(particles, pi / 2)
         #plot the new points
@@ -147,14 +147,14 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
         elif angle > pi:
               angle -= 2 * pi
         print("angle to turn: " + str(angle))
-        left(angle * 180 / pi)
+        left(angle * 180 / pi, interface)
         particles = generate_particles_from_turn(particles, angle)
         
         if dist > 20:
-            forward(20)
+            forward(20, interface)
             particles = generate_particles_from_movement(particles, 20)
         else:
-            forward(dist)
+            forward(dist, interface)
             particles = generate_particles_from_movement(particles, dist)
 
         current = monte_carlo_localisation(particles, interface, sonar_port)
