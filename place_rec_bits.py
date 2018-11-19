@@ -130,7 +130,11 @@ def characterize_location(ls):
 # FILL IN: compare two signatures
 def compare_signatures(ls1, ls2):
     dist = 0
-    print "TODO:    You should implement the function that compares two signatures."
+    #print "TODO:    You should implement the function that compares two signatures."
+    Hm = ls1.sig #Hm is the histogram generated from current point
+    Hk = ls2.sig #Hk is histogram of saved point.
+    for i in range(length(Hm))
+        dist += Hm[i]-Hk[i] #from lecture slides.
     return dist
 
 # This function characterizes the current location, and stores the obtained
