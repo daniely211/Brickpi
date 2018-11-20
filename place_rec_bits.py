@@ -124,10 +124,10 @@ def characterize_location(ls):
     angle_rads = distance_to_rads(turn_circ) * right_turn_error
     interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
     while not interface.motorAngleReferencesReached(motors):
-          motorAngles = interface.getMotorAngles(motors)
-          (reading, _) = interface.getSensorValue(port)
-          ls.sig[reading] += 1
-          time.sleep(0.1)
+        motorAngles = interface.getMotorAngles(motors)
+        #   (reading, _) = interface.getSensorValue(port)
+        #   ls.sig[reading] += 1
+        time.sleep(0.1)
     # for i in range(72):
     #     right(TURNING_ANGLE, interface)
     #     (reading, _) = interface.getSensorValue(port)
