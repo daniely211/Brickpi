@@ -13,6 +13,10 @@ from move import left,right,forward,interface, distance_to_rads
 # interface.initialize()
 
 motors = [0, 2]
+wheel_radius = 2.15
+wheel_circ = 2 * pi * wheel_radius
+wheel_dist = 15.0
+
 
 # interface.motorEnable(motors[0])
 
@@ -121,8 +125,8 @@ def characterize_location(ls):
     interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
     while not interface.motorAngleReferencesReached(motors):
           motorAngles = interface.getMotorAngles(motors)
-        #   (reading, _) = interface.getSensorValue(port)
-        #   ls.sig[reading] += 1
+          (reading, _) = interface.getSensorValue(port)
+          ls.sig[reading] += 1
           time.sleep(0.1)
     # for i in range(72):
     #     right(TURNING_ANGLE, interface)
