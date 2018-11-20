@@ -5,8 +5,8 @@ import random
 from monte_carlo_localisation import monte_carlo_localisation
 import map_particles 
 
-sonar_port = 0
-motors = [0, 2]
+sonar_port = 2
+motors = [0, 2, 3]
 left_touch_port = 1
 right_touch_port = 2
 speed = -6
@@ -26,6 +26,7 @@ interface.sensorEnable(sonar_port, brickpi.SensorType.SENSOR_ULTRASONIC)
 
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])
+interface.motorEnable(motors[2])
 
 motorParams = interface.MotorAngleControllerParameters()
 motorParams.maxRotationAcceleration = 6.0
@@ -41,6 +42,7 @@ motorParams.pidParameters.K_d = 32
 
 interface.setMotorAngleControllerParameters(motors[0], motorParams)
 interface.setMotorAngleControllerParameters(motors[1], motorParams)
+interface.setMotorAngleControllerParameters(motors[2], motorParams)
 
 def distance_to_rads(distance):
     return 2 * pi * (distance / wheel_circ)
@@ -51,9 +53,9 @@ def rotate(interface, angle, direction, error = 1):
     angle_rads = distance_to_rads(turn_circ) * error
 
     if direction == 'left':
-        interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
+        interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads, 0])
     elif direction == 'right':
-        interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
+        interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads, 0])
 
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)
