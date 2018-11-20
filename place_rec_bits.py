@@ -117,7 +117,7 @@ class SignatureContainer():
 def characterize_location(ls):
     # print "TODO:    You should implement the function that captures a signature."
     # by default ls has 255 bins, for each possible depth measurement
-    right_turn_error = 1.158
+    right_turn_error = 1.17
     angle = 360
     full_circ = 2 * math.pi * (wheel_dist / 2)
     turn_circ = full_circ * (float(angle) / 360)
@@ -125,8 +125,8 @@ def characterize_location(ls):
     interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
     while not interface.motorAngleReferencesReached(motors):
         motorAngles = interface.getMotorAngles(motors)
-        #   (reading, _) = interface.getSensorValue(port)
-        #   ls.sig[reading] += 1
+        (reading, _) = interface.getSensorValue(port)
+        ls.sig[reading] += 1
         time.sleep(0.1)
     # for i in range(72):
     #     right(TURNING_ANGLE, interface)
