@@ -6,12 +6,12 @@ import random
 import os
 import brickpi
 import time
-from move import left,right,forward,interface
+from move import left,right,forward,interface, distance_to_rads
 
 #interface=brickpi.Interface()
 # interface.initialize()
 
-# motors = [3]
+motors = [0, 2]
 
 # interface.motorEnable(motors[0])
 
@@ -36,11 +36,9 @@ from move import left,right,forward,interface
 port = 0 # port which ultrasoic sensor is plugged in to
 # interface.sensorEnable(port, brickpi.SensorType.SENSOR_ULTRASONIC);
 
-TURNING_ANGLE = 5
-
 # Location signature class: stores a signature characterizing one location
 class LocationSignature:
-    def __init__(self, no_bins = 360):
+    def __init__(self, no_bins = 255):
         self.sig = [0] * no_bins
 
     def print_signature(self):
@@ -113,20 +111,22 @@ class SignatureContainer():
 # FILL IN: spin robot or sonar to capture a signature and store it in ls
 def characterize_location(ls):
     # print "TODO:    You should implement the function that captures a signature."
-    # spin the sensor 360 exactly
-    # take 360 readings exactly
-    i = 0
-    # while not interface.motorAngleReferencesReached(motors):
-    #       motorAngles = interface.getMotorAngles(motors)
-    #       print(interface.getMotorAngleReferences(motors))
-    #       (reading, _) = interface.getSensorValue(port)
-    #       ls.sig[i] = reading
-    #       i = i + 1
-    #       time.sleep(0.1)
-    for i in range(72):
-        right(TURNING_ANGLE, interface)
-        (reading, _) = interface.getSensorValue(port)
-        ls.sig[i] = reading
+    # by default ls has 255 bins, for each possible depth measurement
+    right_turn_error = 1.158
+    angle = 360
+    full_circ = 2 * pi * (wheel_dist / 2)
+    turn_circ = full_circ * (float(angle) / 360)
+    angle_rads = distance_to_rads(turn_circ) * right_turn_error
+    interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
+    while not interface.motorAngleReferencesReached(motors):
+          motorAngles = interface.getMotorAngles(motors)
+          (reading, _) = interface.getSensorValue(port)
+          ls.sig[reading] += 1
+          time.sleep(0.1)
+    # for i in range(72):
+    #     right(TURNING_ANGLE, interface)
+    #     (reading, _) = interface.getSensorValue(port)
+    #     ls.sig[i] = reading
     # for i in range(len(ls.sig)):
     #     ls.sig[i] = random.randint(0, 255)
     return ls
@@ -137,13 +137,13 @@ def compare_signatures(ls1, ls2):
     Hm = ls1.sig #Hm is the histogram generated from current point
     Hk = ls2.sig #Hk is histogram of saved point.
     for i in range(length(Hm)):
-        dist += Hm[i]-Hk[i] #from lecture slides.
+        dist += (Hm[i]-Hk[i])**2 #from lecture slides.
     return dist
 
 # This function characterizes the current location, and stores the obtained
 # signature into the next available file.
 def learn_location():
-    ls = LocationSignature(int(360/TURNING_ANGLE))
+    ls = LocationSignature()
     characterize_location(ls)
     idx = signatures.get_free_index();
     if (idx == -1): # run out of signature files
@@ -168,19 +168,16 @@ def recognize_location():
     characterize_location(ls_obs);
 
     # FILL IN: COMPARE ls_read with ls_obs and find the best match
-    sig_map = [0] * signatures.size
-    for idx in range(signatures.size):
+    minDist = compare_signatures(ls_obs, signatures.read(0))
+    minIdx = 0
+    for idx in range(1, signatures.size):
         print "STATUS:  Comparing signature " + str(idx) + " with the observed signature."
-        ls_read = signatures.read(idx);
+        ls_read = signatures.read(idx)
         dist    = compare_signatures(ls_obs, ls_read)
-        sig_map[idx] = dist
+        if dist < minDist:
+            minDist = dist
+            minIdx = idx
     
-    minDist = sig_map[0]
-    minSig = 0
-    for i in range(signatures.size):
-        if (sig_map[i]<minDist):
-            minSig = i
-            minDist = sig_map[i]
     return minDist, minSig
 # Prior to starting learning the locations, it should delete files from previous
 # learning either manually or by calling signatures.delete_loc_files().
@@ -192,6 +189,6 @@ signatures = SignatureContainer(5)
 for i in range(5):
     learn_location()
     print("DONE WITH LOCATION")
-    time.sleep(5)
+    time.sleep(10)
 #print(recognize_location())
 
