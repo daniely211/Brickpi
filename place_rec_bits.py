@@ -120,8 +120,8 @@ def characterize_location(ls):
     interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
     while not interface.motorAngleReferencesReached(motors):
           motorAngles = interface.getMotorAngles(motors)
-          (reading, _) = interface.getSensorValue(port)
-          ls.sig[reading] += 1
+        #   (reading, _) = interface.getSensorValue(port)
+        #   ls.sig[reading] += 1
           time.sleep(0.1)
     # for i in range(72):
     #     right(TURNING_ANGLE, interface)
@@ -186,9 +186,11 @@ def recognize_location():
 
 signatures = SignatureContainer(5)
 #signatures.delete_loc_files()
-for i in range(5):
-    learn_location()
-    print("DONE WITH LOCATION")
-    time.sleep(10)
+learn_location()
+
+# for i in range(5):
+#     learn_location()
+#     print("DONE WITH LOCATION")
+#     time.sleep(10)
 #print(recognize_location())
 
