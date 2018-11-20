@@ -53,9 +53,9 @@ def rotate(interface, angle, direction, error = 1):
     angle_rads = distance_to_rads(turn_circ) * error
 
     if direction == 'left':
-        interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads, 0])
+        interface.increaseMotorAngleReferences(motors, [angle_rads, -angle_rads])
     elif direction == 'right':
-        interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads, 0])
+        interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
 
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)

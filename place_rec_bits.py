@@ -11,7 +11,7 @@ from move import left,right,forward,interface, distance_to_rads
 
 #interface=brickpi.Interface()
 # interface.initialize()
-
+motors = [0, 2, 3]
 wheel_radius = 2.15
 wheel_circ = 2 * math.pi * wheel_radius
 wheel_dist = 15.0
@@ -121,7 +121,7 @@ def characterize_location(ls):
     # full_circ = 2 * math.pi * (wheel_dist / 2)
     # turn_circ = full_circ * (float(angle) / 360)
     # angle_rads = distance_to_rads(turn_circ) * right_turn_error
-    interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi])
+    interface.increaseMotorAngleReferences(motors, [0, 0, 2])
     while not interface.motorAngleReferencesReached(motors):
         motorAngles = interface.getMotorAngles(motors)
         # (reading, _) = interface.getSensorValue(port)
