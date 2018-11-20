@@ -114,7 +114,7 @@ def characterize_location(ls):
     # by default ls has 255 bins, for each possible depth measurement
     right_turn_error = 1.158
     angle = 360
-    full_circ = 2 * pi * (wheel_dist / 2)
+    full_circ = 2 * math.pi * (wheel_dist / 2)
     turn_circ = full_circ * (float(angle) / 360)
     angle_rads = distance_to_rads(turn_circ) * right_turn_error
     interface.increaseMotorAngleReferences(motors, [-angle_rads, angle_rads])
