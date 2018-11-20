@@ -191,11 +191,10 @@ def recognize_location():
 
 signatures = SignatureContainer(5)
 #signatures.delete_loc_files()
-learn_location()
-
-# for i in range(5):
-#     learn_location()
-#     print("DONE WITH LOCATION")
-#     time.sleep(10)
-#print(recognize_location())
+# learn_location()
+for i in range(5):
+    learn_location()
+    print("DONE WITH LOCATION")
+    time.sleep(10)
+print(recognize_location())
 
