@@ -43,7 +43,7 @@ port = 0 # port which ultrasoic sensor is plugged in to
 
 # Location signature class: stores a signature characterizing one location
 class LocationSignature:
-    def __init__(self, no_bins = 255):
+    def __init__(self, no_bins = 256):
         self.sig = [0] * no_bins
 
     def print_signature(self):
