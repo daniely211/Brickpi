@@ -6,6 +6,7 @@ import random
 import os
 import brickpi
 import time
+import math
 from move import left,right,forward,interface, distance_to_rads
 
 #interface=brickpi.Interface()
