@@ -46,5 +46,5 @@ def left(angle, interface):
 def right(angle, interface):
     rotateSensor(interface, angle, 'right')
 
-left(2*pi, interface)
-right(2*pi, interface)
+left(2 * pi, interface)
+right(2 * pi, interface)

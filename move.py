@@ -149,25 +149,24 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     (x, y) = waypoint
     dY = y - current[1]
     dX = x - current[0]
-
     dist = sqrt(pow(dY, 2) + pow(dX, 2))
-
     
     delta = 3
     
-    while (dist > delta ):
-        
+    while (dist > delta):
+
         phi = atan2(dY, dX)
         angle = phi - current[2] # offset by pi if dX -ve
-        
+
         if angle < -pi:
-              angle += 2 * pi
+            angle += 2 * pi
         elif angle > pi:
-              angle -= 2 * pi
+            angle -= 2 * pi
+
         print("angle to turn: " + str(angle))
         left(angle * 180 / pi, interface)
         particles = generate_particles_from_turn(particles, angle)
-        
+
         if dist > 20:
             forward(20, interface)
             particles = generate_particles_from_movement(particles, 20)
@@ -182,9 +181,6 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
 
         dist = sqrt(pow(dY, 2) + pow(dX, 2)) # new distance based on partial movement
         print("new distance: " + str(dist))
-
-        
-            
 
         #for i in range (int(dist/20)):
          #   particles = generate_particles_from_movement(particles, 20)
@@ -201,7 +197,6 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
 
 if __name__ == "__main__":
 
-    
     list_waypoint = [(180,30), (180,54), (138,54), (138,168), (114,168), (114,84), (84,84), (84,30)]
     #waypoint test Lab 5
     current = (84,30,0)
