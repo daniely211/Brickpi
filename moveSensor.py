@@ -33,6 +33,11 @@ def rotateSensor(interface, angle, direction):
         interface.increaseMotorAngleReference(motors[0], angle)
 
     while not interface.motorAngleReferenceReached(motors[0]):
+        usReading = interface.getSensorValue(sonar_port)
+        if usReading:
+            print(usReading)
+        else:
+            print("Failed reading")
         time.sleep(0.1)
 
 def left(angle, interface):

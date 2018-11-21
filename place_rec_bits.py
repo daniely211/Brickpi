@@ -11,7 +11,7 @@ from move import left,right,forward,interface, distance_to_rads
 
 #interface=brickpi.Interface()
 # interface.initialize()
-motors = [0, 2, 3]
+motors = [0, 2, 1]
 wheel_radius = 2.15
 wheel_circ = 2 * math.pi * wheel_radius
 wheel_dist = 15.0
