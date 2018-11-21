@@ -5,7 +5,7 @@ import random
 
 motors = [3]
 speed = -6
-
+sonar_port = 2
 interface = brickpi.Interface()
 interface.initialize()
 interface.sensorEnable(sonar_port, brickpi.SensorType.SENSOR_ULTRASONIC)
