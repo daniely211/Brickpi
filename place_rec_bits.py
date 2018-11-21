@@ -91,14 +91,14 @@ def characterize_location(ls):
     # full_circ = 2 * math.pi * (wheel_dist / 2)
     # turn_circ = full_circ * (float(angle) / 360)
     # angle_rads = distance_to_rads(turn_circ) * right_turn_error
-    interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi])
+    interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi*1.01])
     while not interface.motorAngleReferencesReached(motors):
         (reading, _) = interface.getSensorValue(sonar_port)
         ls.sig[reading] += 1
-        time.sleep(0.1)
+        
 
     # turn the motor back to avoid wrapping of cable
-    interface.increaseMotorAngleReferences(motors, [0, 0, -2*math.pi])
+    interface.increaseMotorAngleReferences(motors, [0, 0, -2*math.pi*1.01])
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)
     # for i in range(72):
@@ -114,7 +114,7 @@ def compare_signatures(ls1, ls2):
     #print "TODO:    You should implement the function that compares two signatures."
     Hm = ls1.sig #Hm is the histogram generated from current point
     Hk = ls2.sig #Hk is histogram of saved point.
-    for i in range(length(Hm)):
+    for i in range(len(Hm)):
         dist += (Hm[i]-Hk[i])**2 #from lecture slides.
     return dist
 
@@ -156,7 +156,7 @@ def recognize_location():
             minDist = dist
             minIdx = idx
     
-    return minDist, minSig
+    return minDist, minIdx
 # Prior to starting learning the locations, it should delete files from previous
 # learning either manually or by calling signatures.delete_loc_files().
 # Then, either learn a location, until all the locations are learned, or try to
@@ -164,7 +164,7 @@ def recognize_location():
 
 signatures = SignatureContainer(5)
 #signatures.delete_loc_files()
-learn_location()
+print(recognize_location())
 # for i in range(5):
 #     learn_location()
 #     print("DONE WITH LOCATION")
