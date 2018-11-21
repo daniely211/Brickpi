@@ -3,7 +3,7 @@ import time
 from math import pi, cos, sin, sqrt, atan2, pow, exp
 import random
 
-motors = [3]
+motors = [1]
 speed = -6
 sonar_port = 2
 interface = brickpi.Interface()
@@ -20,19 +20,19 @@ motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 
-motorParams.pidParameters.k_p = 250
-motorParams.pidParameters.k_i = 400
-motorParams.pidParameters.K_d = 32
+motorParams.pidParameters.k_p = 200
+motorParams.pidParameters.k_i = 320
+motorParams.pidParameters.K_d = 15
 
 interface.setMotorAngleControllerParameters(motors[0], motorParams)
 
 def rotateSensor(interface, angle, direction):
     if direction == 'left':
-        interface.increaseMotorAngleReferences(motors, [-angle])
+        interface.increaseMotorAngleReference(motors[0], -angle)
     elif direction == 'right':
-        interface.increaseMotorAngleReferences(motors, [angle])
+        interface.increaseMotorAngleReference(motors[0], angle)
 
-    while not interface.motorAngleReferencesReached(motors):
+    while not interface.motorAngleReferenceReached(motors[0]):
         time.sleep(0.1)
 
 def left(angle, interface):
@@ -42,3 +42,4 @@ def right(angle, interface):
     rotateSensor(interface, angle, 'right')
 
 left(2*pi, interface)
+right(2*pi, interface)
