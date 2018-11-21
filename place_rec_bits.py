@@ -15,6 +15,7 @@ motors = [0, 2, 3]
 wheel_radius = 2.15
 wheel_circ = 2 * math.pi * wheel_radius
 wheel_dist = 15.0
+interface.motorEnable(motors[2])
 
 
 # interface.motorEnable(motors[0])

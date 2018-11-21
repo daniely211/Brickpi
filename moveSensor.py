@@ -5,7 +5,6 @@ import random
 
 motors = [3]
 speed = -6
-current = (0, 0, 0)
 
 interface = brickpi.Interface()
 interface.initialize()
