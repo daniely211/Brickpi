@@ -83,7 +83,7 @@ class SignatureContainer():
         return ls
 
 # FILL IN: spin robot or sonar to capture a signature and store it in ls
-def characterize_location(ls):
+def characterize_location(ls, orientation_ls):
     # print "TODO:    You should implement the function that captures a signature."
     # by default ls has 255 bins, for each possible depth measurement
     # right_turn_error = 1.17
@@ -91,10 +91,16 @@ def characterize_location(ls):
     # full_circ = 2 * math.pi * (wheel_dist / 2)
     # turn_circ = full_circ * (float(angle) / 360)
     # angle_rads = distance_to_rads(turn_circ) * right_turn_error
+
     interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi*1.01])
+    initialAngle = interface.getMotorAngles(motors)[2][0]
     while not interface.motorAngleReferencesReached(motors):
         (reading, _) = interface.getSensorValue(sonar_port)
         ls.sig[reading] += 1
+        currentAngle = interface.getMotorAngles(motors)[2][0]
+        angleTurned = int((currentAngle - initialAngle) / math.pi * 180)
+        orientation_ls.sig[angleTurned] = reading
+
         
 
     # turn the motor back to avoid wrapping of cable
