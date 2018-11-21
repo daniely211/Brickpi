@@ -45,8 +45,8 @@ interface.sensorEnable(sonar_port, brickpi.SensorType.SENSOR_ULTRASONIC)
 interface.motorEnable(motors[0])
 
 topMotorParams = interface.MotorAngleControllerParameters()
-topMotorParams.maxRotationAcceleration = 6.0
-topMotorParams.maxRotationSpeed = 12.0
+topMotorParams.maxRotationAcceleration = 3.0
+topMotorParams.maxRotationSpeed = 6.0
 topMotorParams.feedForwardGain = 255/20.0
 topMotorParams.minPWM = 18.0 
 topMotorParams.pidParameters.minOutput = -255
