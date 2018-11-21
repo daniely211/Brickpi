@@ -95,6 +95,7 @@ def characterize_location(ls):
     while not interface.motorAngleReferencesReached(motors):
         (reading, _) = interface.getSensorValue(sonar_port)
         ls.sig[reading] += 1
+	time.sleep(0.01)
         
 
     # turn the motor back to avoid wrapping of cable
@@ -148,10 +149,12 @@ def recognize_location():
     # FILL IN: COMPARE ls_read with ls_obs and find the best match
     minDist = compare_signatures(ls_obs, signatures.read(0))
     minIdx = 0
+    print("Distance for waypoint " + str(1) + " is: " + str(minDist))
     for idx in range(1, signatures.size):
         print "STATUS:  Comparing signature " + str(idx) + " with the observed signature."
         ls_read = signatures.read(idx)
         dist    = compare_signatures(ls_obs, ls_read)
+	print("Distance for waypoint " + str(idx+1) + " is: " + str(dist))
         if dist < minDist:
             minDist = dist
             minIdx = idx
@@ -163,8 +166,10 @@ def recognize_location():
 # recognize one of them, if locations have already been learned.
 
 signatures = SignatureContainer(5)
+#learn_location()
 #signatures.delete_loc_files()
-print(recognize_location())
+(finDist, finW) = recognize_location()
+print("Final distance for waypoint " + str(finW + 1) + " is: " + str(finDist))
 # for i in range(5):
 #     learn_location()
 #     print("DONE WITH LOCATION")
