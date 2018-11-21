@@ -76,7 +76,7 @@ class SignatureContainer():
                 s = f.readline()
                 if (s != ''):
                     ls.sig[i] = int(s)
-            f.close();
+            f.close()
         else:
             print "WARNING: Signature does not exist."
 

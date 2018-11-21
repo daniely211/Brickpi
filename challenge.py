@@ -1,4 +1,5 @@
 import place_rec_bits
+import move
 waypoints = [(83, 30), (180, 30), (180, 54), (138, 54), (138, 168)]
 
 def navigate_course(current_point):
@@ -31,7 +32,7 @@ def find_orientation(current_graph, location):
 current_signature = LocationSignature()
 orientation_signature = LocationSignature(360)
 characterize_location(current_signature, orientation_signature)
-
 angle_needed = find_orientation(orientation_signature.sig, 1)
-
+print(angle_needed)
+move.set_theta(angle_needed)
 

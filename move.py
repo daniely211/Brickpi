@@ -138,6 +138,10 @@ def square():
         print("drawParticles:" + str(particles))
         time.sleep(0.1)
 
+def set_theta(theta):
+    global current
+    current[2] = theta
+
 def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     #assuming we have access to our x,y,theta values (position and direction of robot)
     #take dY = Y-y;dX = X-x
@@ -195,15 +199,15 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
 
     return current
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    list_waypoint = [(180,30), (180,54), (138,54), (138,168), (114,168), (114,84), (84,84), (84,30)]
-    #waypoint test Lab 5
-    current = (84,30,0)
-    #draw map
-    for waypoint in list_waypoint:
-        current = navigate_to_waypoint(waypoint)
-        print("current: " + str(current))
+#     list_waypoint = [(180,30), (180,54), (138,54), (138,168), (114,168), (114,84), (84,84), (84,30)]
+#     #waypoint test Lab 5
+#     current = (84,30,0)
+#     #draw map
+#     for waypoint in list_waypoint:
+#         current = navigate_to_waypoint(waypoint)
+#         print("current: " + str(current))
     
     #forward(100)   
         
@@ -238,4 +242,4 @@ if __name__ == "__main__":
 #        print(place)
 #        current = navigate_to_waypoint(place)
 #
-    interface.terminate()
+    # interface.terminate()
