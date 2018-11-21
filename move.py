@@ -6,7 +6,7 @@ from monte_carlo_localisation import monte_carlo_localisation
 import map_particles 
 
 sonar_port = 2
-motors = [0, 2, 3]
+motors = [0, 2, 1]
 left_touch_port = 1
 right_touch_port = 2
 speed = -6
@@ -40,9 +40,25 @@ motorParams.pidParameters.k_p = 250
 motorParams.pidParameters.k_i = 400
 motorParams.pidParameters.K_d = 32
 
+interface.sensorEnable(sonar_port, brickpi.SensorType.SENSOR_ULTRASONIC)
+
+interface.motorEnable(motors[0])
+
+topMotorParams = interface.MotorAngleControllerParameters()
+topMotorParams.maxRotationAcceleration = 6.0
+topMotorParams.maxRotationSpeed = 12.0
+topMotorParams.feedForwardGain = 255/20.0
+topMotorParams.minPWM = 18.0 
+topMotorParams.pidParameters.minOutput = -255
+topMotorParams.pidParameters.maxOutput = 255
+
+topMotorParams.pidParameters.k_p = 200
+topMotorParams.pidParameters.k_i = 320
+topMotorParams.pidParameters.K_d = 15
+
 interface.setMotorAngleControllerParameters(motors[0], motorParams)
 interface.setMotorAngleControllerParameters(motors[1], motorParams)
-interface.setMotorAngleControllerParameters(motors[2], motorParams)
+interface.setMotorAngleControllerParameters(motors[2], topMotorParams)
 
 def distance_to_rads(distance):
     return 2 * pi * (distance / wheel_circ)
