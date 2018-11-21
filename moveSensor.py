@@ -28,9 +28,9 @@ interface.setMotorAngleControllerParameters(motors[0], motorParams)
 
 def rotateSensor(interface, angle, direction):
     if direction == 'left':
-        interface.increaseMotorAngleReferences(motors, [-angle_rads])
+        interface.increaseMotorAngleReferences(motors, [-angle])
     elif direction == 'right':
-        interface.increaseMotorAngleReferences(motors, [angle_rads])
+        interface.increaseMotorAngleReferences(motors, [angle])
 
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)
