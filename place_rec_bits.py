@@ -83,7 +83,7 @@ class SignatureContainer():
         return ls
 
 # FILL IN: spin robot or sonar to capture a signature and store it in ls
-def characterize_location(ls):
+def characterize_location(ls, orientation_ls):
     # print "TODO:    You should implement the function that captures a signature."
     # by default ls has 255 bins, for each possible depth measurement
     # right_turn_error = 1.17
@@ -91,14 +91,23 @@ def characterize_location(ls):
     # full_circ = 2 * math.pi * (wheel_dist / 2)
     # turn_circ = full_circ * (float(angle) / 360)
     # angle_rads = distance_to_rads(turn_circ) * right_turn_error
-    interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi])
+
+    interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi*1.01])
+    initialAngle = interface.getMotorAngles(motors)[2][0]
     while not interface.motorAngleReferencesReached(motors):
+        #time.sleep(0.001)
         (reading, _) = interface.getSensorValue(sonar_port)
-        ls.sig[reading] += 1
-        time.sleep(0.1)
+	if reading != 255:
+            ls.sig[reading] += 1
+            currentAngle = interface.getMotorAngles(motors)[2][0]
+            angleTurned = int((currentAngle - initialAngle) / math.pi * 180)
+	    if angleTurned <= 359:
+	        orientation_ls.sig[angleTurned] = reading
+
+    
 
     # turn the motor back to avoid wrapping of cable
-    interface.increaseMotorAngleReferences(motors, [0, 0, -2*math.pi])
+    interface.increaseMotorAngleReferences(motors, [0, 0, -2*math.pi*1.01])
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)
     # for i in range(72):
@@ -114,7 +123,7 @@ def compare_signatures(ls1, ls2):
     #print "TODO:    You should implement the function that compares two signatures."
     Hm = ls1.sig #Hm is the histogram generated from current point
     Hk = ls2.sig #Hk is histogram of saved point.
-    for i in range(length(Hm)):
+    for i in range(len(Hm)):
         dist += (Hm[i]-Hk[i])**2 #from lecture slides.
     return dist
 
@@ -122,7 +131,8 @@ def compare_signatures(ls1, ls2):
 # signature into the next available file.
 def learn_location():
     ls = LocationSignature()
-    characterize_location(ls)
+    orientation_ls = LocationSignature(360)
+    characterize_location(ls, orientation_ls)
     idx = signatures.get_free_index();
     if (idx == -1): # run out of signature files
         print "\nWARNING:"
@@ -132,6 +142,13 @@ def learn_location():
 
     signatures.save(ls,idx)
     print "STATUS:  Location " + str(idx) + " learned and saved."
+
+    # saving the orientation sig manually here
+    f = open("location5", 'w')
+    for i in range(len(orientation_ls.sig)):
+        s = str(i) + ": " + str(orientation_ls.sig[i]) + "\n"
+        f.write(s)
+    f.close();
 
 # This function tries to recognize the current location.
 # 1.   Characterize current location
@@ -143,28 +160,33 @@ def learn_location():
 # 4.   Display the index of the recognized location on the screen
 def recognize_location():
     ls_obs = LocationSignature();
-    characterize_location(ls_obs);
+    orientation_ls = LocationSignature(360)
+    characterize_location(ls_obs, orientation_ls);
 
     # FILL IN: COMPARE ls_read with ls_obs and find the best match
     minDist = compare_signatures(ls_obs, signatures.read(0))
     minIdx = 0
+    print("Distance for waypoint " + str(1) + " is: " + str(minDist))
     for idx in range(1, signatures.size):
         print "STATUS:  Comparing signature " + str(idx) + " with the observed signature."
         ls_read = signatures.read(idx)
         dist    = compare_signatures(ls_obs, ls_read)
+	print("Distance for waypoint " + str(idx+1) + " is: " + str(dist))
         if dist < minDist:
             minDist = dist
             minIdx = idx
     
-    return minDist, minSig
+    return minDist, minIdx
 # Prior to starting learning the locations, it should delete files from previous
 # learning either manually or by calling signatures.delete_loc_files().
 # Then, either learn a location, until all the locations are learned, or try to
 # recognize one of them, if locations have already been learned.
 
 signatures = SignatureContainer(5)
+#learn_location()
 #signatures.delete_loc_files()
-learn_location()
+(finDist, finW) = recognize_location()
+print("Final distance for waypoint " + str(finW + 1) + " is: " + str(finDist))
 # for i in range(5):
 #     learn_location()
 #     print("DONE WITH LOCATION")
