@@ -97,14 +97,14 @@ def characterize_location(ls, orientation_ls):
     while not interface.motorAngleReferencesReached(motors):
         #time.sleep(0.001)
         (reading, _) = interface.getSensorValue(sonar_port)
-	if reading != 255:
-            ls.sig[reading] += 1
-            currentAngle = interface.getMotorAngles(motors)[2][0]
-            angleTurned = int((currentAngle - initialAngle) / math.pi * 180)
-	    if angleTurned <= 359:
-	        orientation_ls.sig[angleTurned] = reading
+	    reading = int(reading / 5)
+        ls.sig[reading] += 1
+        currentAngle = interface.getMotorAngles(motors)[2][0]
+        angleTurned = int((currentAngle - initialAngle) / math.pi * 180)
+        if angleTurned <= 359:
+                  orientation_ls.sig[angleTurned] = reading
 
-    
+
 
     # turn the motor back to avoid wrapping of cable
     interface.increaseMotorAngleReferences(motors, [0, 0, -2*math.pi*1.01])
@@ -130,7 +130,7 @@ def compare_signatures(ls1, ls2):
 # This function characterizes the current location, and stores the obtained
 # signature into the next available file.
 def learn_location():
-    ls = LocationSignature()
+    ls = LocationSignature(51)
     orientation_ls = LocationSignature(360)
     characterize_location(ls, orientation_ls)
     idx = signatures.get_free_index();
@@ -175,7 +175,7 @@ def recognize_location():
         if dist < minDist:
             minDist = dist
             minIdx = idx
-    
+
     return minDist, minIdx
 # Prior to starting learning the locations, it should delete files from previous
 # learning either manually or by calling signatures.delete_loc_files().
@@ -192,4 +192,3 @@ print("Final distance for waypoint " + str(finW + 1) + " is: " + str(finDist))
 #     print("DONE WITH LOCATION")
 #     time.sleep(10)
 # print(recognize_location())
-
