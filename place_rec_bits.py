@@ -176,7 +176,7 @@ def recognize_location():
             minDist = dist
             minIdx = idx
 
-    return minDist, minIdx
+    return minDist, minIdx, (ls_obs, orientation_ls)
 # Prior to starting learning the locations, it should delete files from previous
 # learning either manually or by calling signatures.delete_loc_files().
 # Then, either learn a location, until all the locations are learned, or try to
@@ -185,7 +185,7 @@ def recognize_location():
 signatures = SignatureContainer(5)
 #learn_location()
 #signatures.delete_loc_files()
-(finDist, finW) = recognize_location()
+(finDist, finW, _) = recognize_location()
 print("Final distance for waypoint " + str(finW + 1) + " is: " + str(finDist))
 # for i in range(5):
 #     learn_location()

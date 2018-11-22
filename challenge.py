@@ -27,12 +27,17 @@ def find_orientation(current_graph, location):
     }
     return turn_angle
 
+if __name__ == "__main__":
+    # given we are at location 1
+    (finDist, finW, location_sig) = recognize_location()
+    current_location = waypoints[finW]
+    current_signature = location_sig[0] #the first one is the frequency historgram
+    orientation_signature = location_sig[1] # the second one is the orientation one
+    angle_needed = find_orientation(orientation_signature.sig, 1) 
+    print(angle_needed)
+    
+    move.set_theta(angle_needed)
 
-# given we are at location 1
-current_signature = LocationSignature()
-orientation_signature = LocationSignature(360)
-characterize_location(current_signature, orientation_signature)
-angle_needed = find_orientation(orientation_signature.sig, 1)
-print(angle_needed)
-move.set_theta(angle_needed)
+
+
 

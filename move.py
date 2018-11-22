@@ -142,6 +142,10 @@ def set_theta(theta):
     global current
     current[2] = theta
 
+def set_current(x, y, theta):
+    global current
+    current = (x, y, theta)
+
 def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     #assuming we have access to our x,y,theta values (position and direction of robot)
     #take dY = Y-y;dX = X-x
