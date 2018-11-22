@@ -3,7 +3,7 @@ import time
 from math import pi, cos, sin, sqrt, atan2, pow, exp
 import random
 from monte_carlo_localisation import monte_carlo_localisation
-import map_particles 
+import map_particles
 
 sonar_port = 2
 motors = [0, 2, 1]
@@ -29,10 +29,10 @@ interface.motorEnable(motors[1])
 interface.motorEnable(motors[2])
 
 motorParams = interface.MotorAngleControllerParameters()
-motorParams.maxRotationAcceleration = 6.0
-motorParams.maxRotationSpeed = 12.0
+motorParams.maxRotationAcceleration = 8.0
+motorParams.maxRotationSpeed = 6.0
 motorParams.feedForwardGain = 255/20.0
-motorParams.minPWM = 18.0 
+motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
 
@@ -48,7 +48,7 @@ topMotorParams = interface.MotorAngleControllerParameters()
 topMotorParams.maxRotationAcceleration = 3.0
 topMotorParams.maxRotationSpeed = 6.0
 topMotorParams.feedForwardGain = 255/20.0
-topMotorParams.minPWM = 18.0 
+topMotorParams.minPWM = 18.0
 topMotorParams.pidParameters.minOutput = -255
 topMotorParams.pidParameters.maxOutput = 255
 
@@ -154,9 +154,9 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     dY = y - current[1]
     dX = x - current[0]
     dist = sqrt(pow(dY, 2) + pow(dX, 2))
-    
+
     delta = 3
-    
+
     while (dist > delta):
 
         phi = atan2(dY, dX)
@@ -208,9 +208,9 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
 #     for waypoint in list_waypoint:
 #         current = navigate_to_waypoint(waypoint)
 #         print("current: " + str(current))
-    
-    #forward(100)   
-        
+
+    #forward(100)
+
 
         # update
     #particles = Particles();
@@ -223,7 +223,7 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     #    time.sleep(0.05);
 
 
-    
+
     #current = navigate_to_waypoint((180,30))
     #current = navigate_to_waypoint((180,54))
     #current = navigate_to_waypoint((138,54))
@@ -232,8 +232,8 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     #current = navigate_to_waypoint((114,84))
     #current = navigate_to_waypoint((84,84))
     #current = navigate_to_waypoint((84,30))
-    
-    # 
+
+    #
 
 #place = ((0,0))
 #    while( True  ):

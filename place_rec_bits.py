@@ -91,10 +91,13 @@ def characterize_location(ls, orientation_ls):
     # full_circ = 2 * math.pi * (wheel_dist / 2)
     # turn_circ = full_circ * (float(angle) / 360)
     # angle_rads = distance_to_rads(turn_circ) * right_turn_error
-
-    interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi*1.01])
+    speed = 4
     initialAngle = interface.getMotorAngles(motors)[2][0]
-    while not interface.motorAngleReferencesReached(motors):
+    currentAngle = interface.getMotorAngles(motors)[2][0]
+
+    #interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi*1.01])
+    #interface.increaseMotorAngleReferences(motors[2], 4)
+    while not interface.motorAngleReferenceReached(motors[2]): #currentAngle - initialAngle < 2*math.pi:
         #time.sleep(0.001)
         (reading, _) = interface.getSensorValue(sonar_port)
 	    reading = int(reading / 5)
@@ -103,7 +106,7 @@ def characterize_location(ls, orientation_ls):
         angleTurned = int((currentAngle - initialAngle) / math.pi * 180)
         if angleTurned <= 359:
                   orientation_ls.sig[angleTurned] = reading
-
+    #interface.setMotorPwm(motors[2], 0)
 
 
     # turn the motor back to avoid wrapping of cable
