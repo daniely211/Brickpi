@@ -95,17 +95,17 @@ def characterize_location(ls, orientation_ls):
     initialAngle = interface.getMotorAngles(motors)[2][0]
     currentAngle = interface.getMotorAngles(motors)[2][0]
 
-    #interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi*1.01])
+    interface.increaseMotorAngleReferences(motors, [0, 0, 2*math.pi*1.01])
     #interface.increaseMotorAngleReferences(motors[2], 4)
     while not interface.motorAngleReferenceReached(motors[2]): #currentAngle - initialAngle < 2*math.pi:
         #time.sleep(0.001)
         (reading, _) = interface.getSensorValue(sonar_port)
-	    reading = int(reading / 5)
+	reading = int(reading / 5)
         ls.sig[reading] += 1
         currentAngle = interface.getMotorAngles(motors)[2][0]
         angleTurned = int((currentAngle - initialAngle) / math.pi * 180)
         if angleTurned <= 359:
-                  orientation_ls.sig[angleTurned] = reading
+            orientation_ls.sig[angleTurned] = reading
     #interface.setMotorPwm(motors[2], 0)
 
     return orientation_ls
@@ -115,12 +115,9 @@ def characterize_location(ls, orientation_ls):
     interface.increaseMotorAngleReferences(motors, [0, 0, -2*math.pi*1.01])
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)
-    # for i in range(72):
-    #     right(TURNING_ANGLE, interface)
-    #     (reading, _) = interface.getSensorValue(port)
-    #     ls.sig[i] = reading
-    # for i in range(len(ls.sig)):
-    #     ls.sig[i] = random.randint(0, 255)
+        (reading, _) = interface.getSensorValue(sonar_port)
+	reading = int(reading / 5)
+        ls.sig[reading] += 1
     return ls
 # FILL IN: compare two signatures
 def compare_signatures(ls1, ls2):
@@ -135,7 +132,7 @@ def compare_signatures(ls1, ls2):
 # This function characterizes the current location, and stores the obtained
 # signature into the next available file.
 def learn_location():
-    ls = LocationSignature(51)
+    ls = LocationSignature(52)
     orientation_ls = LocationSignature(360)
     characterize_location(ls, orientation_ls)
     idx = signatures.get_free_index();
@@ -149,7 +146,7 @@ def learn_location():
     print "STATUS:  Location " + str(idx) + " learned and saved."
 
     # saving the orientation sig manually here
-    f = open("location5", 'w')
+    f = open("location2", 'w')
     for i in range(len(orientation_ls.sig)):
         s = str(i) + ": " + str(orientation_ls.sig[i]) + "\n"
         f.write(s)
@@ -164,7 +161,7 @@ def learn_location():
 #      actual characterization is the smallest.
 # 4.   Display the index of the recognized location on the screen
 def recognize_location():
-    ls_obs = LocationSignature();
+    ls_obs = LocationSignature(52);
     orientation_ls = LocationSignature(360)
     orientation_ls = characterize_location(ls_obs, orientation_ls);
 
@@ -181,34 +178,7 @@ def recognize_location():
             minDist = dist
             minIdx = idx
 
-    
-
-    return minDist, minIdx, orientation_ls
-
-def roll(r_ls):
-    r_ls = r_ls.append(r_ls[0])
-    r_ls = r_ls[1:]
-    return r_ls
-
-
-
-def check_angle(idx, orientation_ls):
-    f = open("location" + str(idx), 'r')
-    
-    min = 1000000
-    min_idx = 0
-    for i in range(len(f)):
-        orientation_ls = roll(orientation_ls)
-        
-        # do dot.product instead 
-        ls_diff = compare_signatures(f, orientation_ls)
-        if( ls_diff < min):
-            min = ls_diff
-            min_idx = i
-    
-    return min_idx
-
-
+    return minDist, minIdx, (ls_obs, orientation_ls)
 
 # Prior to starting learning the locations, it should delete files from previous
 # learning either manually or by calling signatures.delete_loc_files().
@@ -218,11 +188,8 @@ def check_angle(idx, orientation_ls):
 signatures = SignatureContainer(5)
 #learn_location()
 #signatures.delete_loc_files()
-(finDist, finWm, orientation_ls) = recognize_location()
 
-finAngle = check_angle(finWm, orientation_ls)
-
-
+(finDist, finW, _) = recognize_location()
 print("Final distance for waypoint " + str(finW + 1) + " is: " + str(finDist))
 # for i in range(5):
 #     learn_location()
