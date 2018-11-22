@@ -1,5 +1,5 @@
 from place_rec_bits import LocationSignature, characterize_location
-import move
+from move import set_current, navigate_to_waypoint
 import numpy as np
 waypoints = [(83, 30), (180, 30), (180, 54), (138, 54), (138, 168)]
 
@@ -31,12 +31,11 @@ if __name__ == "__main__":
     # given we are at location 1
     (finDist, finW, location_sig) = recognize_location()
     current_location = waypoints[finW]
-    current_signature = location_sig[0] #the first one is the frequency historgram
     orientation_signature = location_sig[1] # the second one is the orientation one
-    angle_needed = find_orientation(orientation_signature.sig, 1) 
+    new_theta = find_orientation(orientation_signature.sig, 1) 
     print(angle_needed)
-    
-    move.set_theta(angle_needed)
+    set_current(current_location, theta)
+    navigate_course(current_point)
 
 
 

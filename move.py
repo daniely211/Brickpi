@@ -141,7 +141,7 @@ def set_theta(theta):
     (x, y, _) = current
     current = (x, y, theta)
 
-def set_current(x, y, theta):
+def set_current((x, y) theta):
     global current
     current = (x, y, theta)
 
@@ -156,44 +156,43 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     (x, y) = waypoint
     dY = y - current[1]
     dX = x - current[0]
-
-    phi = atan2(dY, dX)
     dist = sqrt(pow(dY, 2) + pow(dX, 2))
+    delta = 3
+    
+    while (dist > delta ):
+        phi = atan2(dY, dX)
+        angle = phi - current[2] # offset by pi if dX -ve
+        if angle < -pi:
+            angle += 2 * pi
+        elif angle > pi:
+            angle -= 2 * pi
+        left(angle * 180 / pi, interface)
+        particles = generate_particles_from_turn(particles, angle)
+        forward(dist, interface)
+        particles = generate_particles_from_movement(particles, dist)
 
-    angle = phi - current[2] # offset by pi if dX -ve
-
-    if angle < -pi:
-      angle += 2 * pi
-    elif angle > pi:
-      angle -= 2 * pi
-
-    left(angle * 180 / pi)
-    particles = generate_particles_from_turn(particles, angle)
-    forward(dist)
-    particles = generate_particles_from_movement(particles, dist)
-    current = monte_carlo_localisation(particles, interface, sonar_port)
+        # localisation to estimate position
+        current = monte_carlo_localisation(particles, interface, sonar_port)
+        (x, y) = waypoint
+        dY = y - current[1]
+        dX = x - current[0]
+        dist = sqrt(pow(dY, 2) + pow(dX, 2)) # recalculate distance from current waypoint
 
     return current
+
+
 
 if __name__ == "__main__":
 
     #waypoint test Lab 5
-    current = (84,30,0)
-    current = navigate_to_waypoint((180,30))
-    current = navigate_to_waypoint((180,54))
-    current = navigate_to_waypoint((138,54))
-    current = navigate_to_waypoint((138,168))
-    current = navigate_to_waypoint((114,168))
-    current = navigate_to_waypoint((114,84))
-    current = navigate_to_waypoint((84,84))
-    current = navigate_to_waypoint((84,30))
+    # current = (84,30,0)
+    # current = navigate_to_waypoint((180,30))
+    # current = navigate_to_waypoint((180,54))
+    # current = navigate_to_waypoint((138,54))
+    # current = navigate_to_waypoint((138,168))
+    # current = navigate_to_waypoint((114,168))
+    # current = navigate_to_waypoint((114,84))
+    # current = navigate_to_waypoint((84,84))
+    # current = navigate_to_waypoint((84,30))
 
-
-#place = ((0,0))
-#    while( True  ):
-#        place = input("Enter Coordinates: ")
-#        place = (place[0]), (place[1])
-#        print(place)
-#        current = navigate_to_waypoint(place)
-#
-    interface.terminate()
+    # interface.terminate()
