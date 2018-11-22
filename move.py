@@ -4,8 +4,8 @@ from math import pi, cos, sin, sqrt, atan2, pow, exp
 import random
 from monte_carlo_localisation import monte_carlo_localisation
 
-sonar_port = 0
-motors = [0, 2]
+sonar_port = 2
+motors = [0, 2, 1]
 left_touch_port = 1
 right_touch_port = 2
 speed = -6
@@ -25,6 +25,7 @@ interface.sensorEnable(sonar_port, brickpi.SensorType.SENSOR_ULTRASONIC)
 
 interface.motorEnable(motors[0])
 interface.motorEnable(motors[1])
+interface.motorEnable(motors[2])
 
 motorParams = interface.MotorAngleControllerParameters()
 motorParams.maxRotationAcceleration = 6.0
@@ -38,8 +39,23 @@ motorParams.pidParameters.k_p = 250
 motorParams.pidParameters.k_i = 400
 motorParams.pidParameters.K_d = 32
 
+interface.sensorEnable(sonar_port, brickpi.SensorType.SENSOR_ULTRASONIC)
+
+topMotorParams = interface.MotorAngleControllerParameters()
+topMotorParams.maxRotationAcceleration = 3.0
+topMotorParams.maxRotationSpeed = 3.0
+topMotorParams.feedForwardGain = 255/20.0
+topMotorParams.minPWM = 18.0 
+topMotorParams.pidParameters.minOutput = -255
+topMotorParams.pidParameters.maxOutput = 255
+
+topMotorParams.pidParameters.k_p = 360
+topMotorParams.pidParameters.k_i = 800
+topMotorParams.pidParameters.K_d = 22
+
 interface.setMotorAngleControllerParameters(motors[0], motorParams)
 interface.setMotorAngleControllerParameters(motors[1], motorParams)
+interface.setMotorAngleControllerParameters(motors[2], topMotorParams)
 
 def distance_to_rads(distance):
     return 2 * pi * (distance / wheel_circ)
@@ -118,6 +134,12 @@ def square():
         #plot the new points
         print("drawParticles:" + str(particles))
         time.sleep(0.1)
+
+
+def set_theta(theta):
+    global current
+    (x, y, _) = current
+    current = (x, y, theta)
 
 def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     #assuming we have access to our x,y,theta values (position and direction of robot)

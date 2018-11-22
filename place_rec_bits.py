@@ -113,12 +113,9 @@ def characterize_location(ls, orientation_ls):
     interface.increaseMotorAngleReferences(motors, [0, 0, -2*math.pi*1.01])
     while not interface.motorAngleReferencesReached(motors):
         time.sleep(0.1)
-    # for i in range(72):
-    #     right(TURNING_ANGLE, interface)
-    #     (reading, _) = interface.getSensorValue(port)
-    #     ls.sig[i] = reading
-    # for i in range(len(ls.sig)):
-    #     ls.sig[i] = random.randint(0, 255)
+        (reading, _) = interface.getSensorValue(sonar_port)
+	reading = int(reading / 5)
+        ls.sig[reading] += 1
     return ls
 # FILL IN: compare two signatures
 def compare_signatures(ls1, ls2):
@@ -147,7 +144,7 @@ def learn_location():
     print "STATUS:  Location " + str(idx) + " learned and saved."
 
     # saving the orientation sig manually here
-    f = open("location5", 'w')
+    f = open("location2", 'w')
     for i in range(len(orientation_ls.sig)):
         s = str(i) + ": " + str(orientation_ls.sig[i]) + "\n"
         f.write(s)
