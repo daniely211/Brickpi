@@ -1,5 +1,6 @@
-import place_rec_bits
+from place_rec_bits import LocationSignature, characterize_location
 import move
+import numpy as np
 waypoints = [(83, 30), (180, 30), (180, 54), (138, 54), (138, 168)]
 
 def navigate_course(current_point):
@@ -21,10 +22,9 @@ def find_orientation(current_graph, location):
     current_graph = np.array(current_graph)
     turn_angle = get_lowest_point_index(current_graph)
     
-    if (location == 1) {
+    if (location == 1):
         # the shortest wall is perpendicular to the wall
         turn_angle = turn_angle - 90
-    }
     return turn_angle
 
 if __name__ == "__main__":
