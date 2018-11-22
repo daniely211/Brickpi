@@ -108,6 +108,8 @@ def characterize_location(ls, orientation_ls):
                   orientation_ls.sig[angleTurned] = reading
     #interface.setMotorPwm(motors[2], 0)
 
+    return orientation_ls
+
 
     # turn the motor back to avoid wrapping of cable
     interface.increaseMotorAngleReferences(motors, [0, 0, -2*math.pi*1.01])
@@ -164,7 +166,7 @@ def learn_location():
 def recognize_location():
     ls_obs = LocationSignature();
     orientation_ls = LocationSignature(360)
-    characterize_location(ls_obs, orientation_ls);
+    orientation_ls = characterize_location(ls_obs, orientation_ls);
 
     # FILL IN: COMPARE ls_read with ls_obs and find the best match
     minDist = compare_signatures(ls_obs, signatures.read(0))
@@ -179,7 +181,35 @@ def recognize_location():
             minDist = dist
             minIdx = idx
 
-    return minDist, minIdx
+    
+
+    return minDist, minIdx, orientation_ls
+
+def roll(r_ls):
+    r_ls = r_ls.append(r_ls[0])
+    r_ls = r_ls[1:]
+    return r_ls
+
+
+
+def check_angle(idx, orientation_ls):
+    f = open("location" + str(idx), 'r')
+    
+    min = 1000000
+    min_idx = 0
+    for i in range(len(f)):
+        orientation_ls = roll(orientation_ls)
+        
+        # do dot.product instead 
+        ls_diff = compare_signatures(f, orientation_ls)
+        if( ls_diff < min):
+            min = ls_diff
+            min_idx = i
+    
+    return min_idx
+
+
+
 # Prior to starting learning the locations, it should delete files from previous
 # learning either manually or by calling signatures.delete_loc_files().
 # Then, either learn a location, until all the locations are learned, or try to
@@ -188,10 +218,15 @@ def recognize_location():
 signatures = SignatureContainer(5)
 #learn_location()
 #signatures.delete_loc_files()
-(finDist, finW) = recognize_location()
+(finDist, finWm, orientation_ls) = recognize_location()
+
+finAngle = check_angle(finWm, orientation_ls)
+
+
 print("Final distance for waypoint " + str(finW + 1) + " is: " + str(finDist))
 # for i in range(5):
 #     learn_location()
 #     print("DONE WITH LOCATION")
 #     time.sleep(10)
 # print(recognize_location())
+
