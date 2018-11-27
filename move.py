@@ -141,7 +141,7 @@ def set_theta(theta):
     (x, y, _) = current
     current = (x, y, theta)
 
-def set_current((x, y) theta):
+def set_current((x, y), theta):
     global current
     current = (x, y, theta)
 
@@ -162,6 +162,7 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
     while (dist > delta ):
         phi = atan2(dY, dX)
         angle = phi - current[2] # offset by pi if dX -ve
+        #wrap around angle
         if angle < -pi:
             angle += 2 * pi
         elif angle > pi:

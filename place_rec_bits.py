@@ -122,7 +122,6 @@ def characterize_location(ls, orientation_ls):
 # FILL IN: compare two signatures
 def compare_signatures(ls1, ls2):
     dist = 0
-    #print "TODO:    You should implement the function that compares two signatures."
     Hm = ls1.sig #Hm is the histogram generated from current point
     Hk = ls2.sig #Hk is histogram of saved point.
     for i in range(len(Hm)):
