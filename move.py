@@ -28,8 +28,8 @@ interface.motorEnable(motors[1])
 interface.motorEnable(motors[2])
 
 motorParams = interface.MotorAngleControllerParameters()
-motorParams.maxRotationAcceleration = 6.0
-motorParams.maxRotationSpeed = 6.0
+motorParams.maxRotationAcceleration = 8.0
+motorParams.maxRotationSpeed = 12.0
 motorParams.feedForwardGain = 255/20.0
 motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
@@ -167,9 +167,11 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
             angle += 2 * pi
         elif angle > pi:
             angle -= 2 * pi
-        left(angle * 180 / pi, interface)
+        print("Turning through angle to face next waypoint: " +
+            str(angle*180/pi))
+        left(angle * 180 / pi)
         particles = generate_particles_from_turn(particles, angle)
-        forward(dist, interface)
+        forward(dist)
         particles = generate_particles_from_movement(particles, dist)
 
         # localisation to estimate position

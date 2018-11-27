@@ -179,7 +179,7 @@ def recognize_location():
 # recognize one of them, if locations have already been learned.
 
 signatures = SignatureContainer(5)
-#learn_location()
+learn_location()
 #signatures.delete_loc_files()
 
 #(finDist, finW, _) = recognize_location()
