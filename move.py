@@ -183,7 +183,7 @@ def navigate_to_waypoint(waypoint):  #X is desired X,Y is desired Y
 
 
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
 
     #waypoint test Lab 5
     # current = (84,30,0)
