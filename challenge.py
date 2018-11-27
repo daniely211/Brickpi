@@ -16,8 +16,9 @@ def navigate_course(current_point):
 def get_lowest_point_index(arr):
     return arr.argsort()[0]
 
-def roll(r_ls):
-    r_ls = r_ls.append(r_ls[0])
+def roll(r_ls): 
+    print(r_ls)
+    r_ls.append(r_ls[0])
     r_ls = r_ls[1:]
     return r_ls
 
@@ -26,13 +27,13 @@ def check_angle(idx, orientation_ls):
         content = f.readlines()
     # you may also want to remove whitespace characters like `\n` at the end of each line
     content = [x.strip() for x in content]
-    signature = [x.split()[1] for x in content]
+    signature = [int(x.split()[1]) for x in content]
     location_ls = LocationSignature()
     location_ls.save_signature(signature)
     min = 1000000000
     min_idx = 0
     for i in range(len(content)):
-        orientation_ls = roll(orientation_ls)
+        orientation_ls.sig = roll(orientation_ls.sig)
         # do dot.product instead
         ls_diff = compare_signatures(location_ls, orientation_ls)
         if(ls_diff < min):

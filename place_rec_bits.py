@@ -100,7 +100,7 @@ def characterize_location(ls, orientation_ls):
     while not interface.motorAngleReferenceReached(motors[2]): #currentAngle - initialAngle < 2*math.pi:
         #time.sleep(0.001)
         (reading, _) = interface.getSensorValue(sonar_port)
-	    reading = int(reading / 5)
+	reading = int(reading / 5)
         ls.sig[reading] += 1
         currentAngle = interface.getMotorAngles(motors)[2][0]
         angleTurned = int((currentAngle - initialAngle) / math.pi * 180)
