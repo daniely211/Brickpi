@@ -71,7 +71,7 @@ def measurement_update_from_sonar(weighted_set, interface, sonar_port):
 
     for (w, p) in weighted_set:
         m, wall = find_distance(p)
-        new_weight = likelihood(m, sonar_reading)
+        new_weight = likelihood(m, sonar_reading)*w
         reweighted_set.append((new_weight, p))
 
     return reweighted_set
