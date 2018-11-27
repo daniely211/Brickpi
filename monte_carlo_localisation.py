@@ -67,8 +67,6 @@ def likelihood(m, z):
 
 def measurement_update_from_sonar(weighted_set, interface, sonar_port):
     sonar_reading = get_sonar_reading(interface, sonar_port)
-    print("#####################################")
-    print("sonar reading: " + str(sonar_reading))
     reweighted_set = []
 
     for (w, p) in weighted_set:
